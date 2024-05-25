@@ -37,13 +37,19 @@ public class CpuMonitoringService {
     //스케쥴러 사용 - 가져온 cpu 사용률 DB에 저장
     @Scheduled(cron = "0/10 * * * * *") // 매 10초마다 실행
     public void saveCpuUsage() {
-        double cpuUsage = getCpuUsage(); // CPU 사용률 수집 로직
-        // 소수점 셋째자리에서 반올림 후 % ex) 7.93%
-        String formattedCpuUsage = formatCpuUsage(cpuUsage);
+        try {
+            Double cpuUsage = getCpuUsage(); // CPU 사용률 수집 로직
+            if (cpuUsage != null) {
+                // 소수점 셋째자리에서 반올림 후 % ex) 7.93%
+                String formattedCpuUsage = formatCpuUsage(cpuUsage);
 
-        CpuUsage usage = new CpuUsage(formattedCpuUsage, LocalDateTime.now().withNano(0));
+                CpuUsage usage = new CpuUsage(formattedCpuUsage, LocalDateTime.now().withNano(0));
 
-        cpuUsageRepository.save(usage);
+                cpuUsageRepository.save(usage);
+            }
+        } catch (Exception e) {
+            log.error("Failed to save CPU usage data : {}", e.getMessage());
+        }
     }
 
     // cpu 사용률 - 소수점 셋째자리에서 반올림 후 % ex) 7.93%
@@ -53,14 +59,22 @@ public class CpuMonitoringService {
     }
 
     // CPU 사용률 가져오는 로직
-    private double getCpuUsage() {
-        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-        if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
+    private Double getCpuUsage() {
+        try {
+            OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
             com.sun.management.OperatingSystemMXBean sunOsBean = (com.sun.management.OperatingSystemMXBean) osBean;
             return sunOsBean.getSystemCpuLoad() * 100;
-        } else {
-            throw new UnsupportedOperationException("CPU usage measurement not supported on this platform.");
+        } catch (Exception e) {
+            log.error("Failed to get CPU usage Data : {}", e.getMessage());
+            return null;
         }
+
     }
+
+    // TODO : 지정한 시간 구간의 분 단위 CPU 사용률 조회
+
+    // TODO : 지정한 날짜의 시 단위 CPU 최소/최대/평균 사용률 조회
+
+    // TODO : 지정한 날짜 구간의 일 단위 CPU 최소/최대/평균 사용률 조회
 
 }
