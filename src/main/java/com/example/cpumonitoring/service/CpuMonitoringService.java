@@ -25,7 +25,7 @@ public class CpuMonitoringService {
         // 초기화 시점에서 일정 시간 동안 CPU 사용률을 미리 수집
         try {
             for (int i = 0; i < 5; i++) {
-                getCpuUsage();
+                collectCpuUsage();
                 Thread.sleep(1000); // 1초 대기
             }
             saveCpuUsage();
@@ -38,7 +38,7 @@ public class CpuMonitoringService {
     @Scheduled(cron = "0/10 * * * * *") // 매 10초마다 실행
     public void saveCpuUsage() {
         try {
-            Double cpuUsage = getCpuUsage(); // CPU 사용률 수집 로직
+            Double cpuUsage = collectCpuUsage(); // CPU 사용률 수집 로직
             if (cpuUsage != null) {
                 // 소수점 셋째자리에서 반올림 후 % ex) 7.93%
                 String formattedCpuUsage = formatCpuUsage(cpuUsage);
@@ -59,7 +59,7 @@ public class CpuMonitoringService {
     }
 
     // CPU 사용률 가져오는 로직
-    private Double getCpuUsage() {
+    private Double collectCpuUsage() {
         try {
             OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
             com.sun.management.OperatingSystemMXBean sunOsBean = (com.sun.management.OperatingSystemMXBean) osBean;
