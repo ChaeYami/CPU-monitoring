@@ -28,7 +28,7 @@ public class CpuMonitoringService {
                 getCpuUsage();
                 Thread.sleep(1000); // 1초 대기
             }
-            collectCpuUsage();
+            saveCpuUsage();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -36,7 +36,7 @@ public class CpuMonitoringService {
 
     //스케쥴러 사용 - 가져온 cpu 사용률 DB에 저장
     @Scheduled(cron = "0/10 * * * * *") // 매 10초마다 실행
-    public void collectCpuUsage() {
+    public void saveCpuUsage() {
         double cpuUsage = getCpuUsage(); // CPU 사용률 수집 로직
         // 소수점 셋째자리에서 반올림 후 % ex) 7.93%
         String formattedCpuUsage = formatCpuUsage(cpuUsage);
