@@ -19,7 +19,7 @@
     password: ${H2_PASSWORD}
   ```
 - 프로젝트 root 경로 > 환경 변수 파일(.env) 생성 > 데이터베이스 username과 password 추가:
-  ```
+  ```env
   H2_USERNAME=
   H2_PASSWORD=
   ```
@@ -30,7 +30,7 @@
     ```
 
 4. Swagger Documentation:
-    ```
+    ```url
     http://localhost:8080/swagger-ui/index.html
     ```
 
@@ -101,26 +101,113 @@
 
 ## API Document
 
-- 분 단위 조회:
-    ```
-    GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
-    ```
-    - method
-    - request
-    - response
+### 분 단위 조회
 
-- 시 단위 조회:
-    ```
-    GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
-    ```
-    - method
-    - request
-    - response
- 
-- 일 단위 조회:
-    ```
-    GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
-    ```
-    - method
-    - request
-    - response
+```url
+GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
+```
+#### method : GET
+#### Query Params : startTime, startTime
+<details>
+<summary>Example</summary>
+<div markdown = '1'></div>
+
+- Request
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
+  ```
+- Response
+  ```json
+  [
+    {
+        "id": 1,
+        "usage": "4.67%",
+        "timestamp": "2024-05-26T06:11:16"
+    },
+    {
+        "id": 2,
+        "usage": "9.41%",
+        "timestamp": "2024-05-26T06:12:00"
+    },
+    {
+        "id": 3,
+        "usage": "3.31%",
+        "timestamp": "2024-05-26T06:13:00"
+    },
+    {
+        "id": 4,
+        "usage": "8.56%",
+        "timestamp": "2024-05-26T06:14:00"
+    },
+    {
+        "id": 5,
+        "usage": "8.58%",
+        "timestamp": "2024-05-26T06:15:00"
+    },
+  ]
+  ```
+</details>
+    
+    
+### 시 단위 조회
+```url
+GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
+```
+#### method : GET
+#### Query Params : date
+<details>
+<summary>Example</summary>
+<div markdown = '1'></div>
+
+- Request
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
+  ```
+- Response
+  ```json
+    {
+        "2": {
+            "minUsage": 4.02,
+            "maxUsage": 4.02,
+            "averageUsage": 4.02
+        },
+        "3": {
+            "minUsage": 4.37,
+            "maxUsage": 14.35,
+            "averageUsage": 8.28
+        }
+    }
+  ```
+</details>
+
+     
+### 일 단위 조회
+```url
+GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
+```
+#### method : GET
+#### Query Params : startDate, endDate
+<details>
+<summary>Example</summary>
+<div markdown = '1'></div>
+
+- Request
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
+  ```
+- Response
+  ```json
+  {
+    "2024-05-27": {
+        "minUsage": 4.02,
+        "maxUsage": 14.35,
+        "averageUsage": 7.42
+    },
+    "2024-05-26": {
+        "minUsage": 2.99,
+        "maxUsage": 27.69,
+        "averageUsage": 9.35
+    }
+  }
+  ```
+</details>
