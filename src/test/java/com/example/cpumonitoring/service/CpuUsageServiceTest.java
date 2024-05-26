@@ -44,7 +44,7 @@ class CpuUsageServiceTest {
 
     @Test
     @DisplayName("DB 저장")
-    public void testSaveCpuUsage() {
+    void testSaveCpuUsage() {
         // Given
         CpuUsage cpuUsage = new CpuUsage("7.93%", LocalDateTime.now());
         when(cpuUsageRepository.save(cpuUsage)).thenReturn(cpuUsage);
@@ -60,7 +60,7 @@ class CpuUsageServiceTest {
 
     @Test
     @DisplayName("지정한 구간 DB 조회")
-    public void testFindByTimestampBetween() {
+    void testFindByTimestampBetween() {
         // Given
         LocalDateTime start = LocalDateTime.now().minusDays(1);
         LocalDateTime end = LocalDateTime.now();
@@ -83,7 +83,7 @@ class CpuUsageServiceTest {
 
     @Test
     @DisplayName("cpu 사용률 수집 및 저장")
-    public void testSaveCpuUsage_success() {
+    void testSaveCpuUsage_success() {
         // Given
         Double mockCpuUsage = 7.928;
         when(cpuUsageCollector.collectCpuUsage()).thenReturn(mockCpuUsage);
@@ -99,7 +99,7 @@ class CpuUsageServiceTest {
 
     @Test
     @DisplayName("SaveCpuUsage 서비스 메서드 에러 발생")
-    public void testSaveCpuUsage_WhenExceptionThrown() {
+    void testSaveCpuUsage_WhenExceptionThrown() {
         // Given
         when(cpuUsageCollector.collectCpuUsage()).thenThrow(new RuntimeException("Test exception"));
 
