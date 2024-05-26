@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-class CpuMonitoringServiceTest {
+class CpuUsageServiceTest {
     @Mock
     private CpuUsageRepository cpuUsageRepository;
 

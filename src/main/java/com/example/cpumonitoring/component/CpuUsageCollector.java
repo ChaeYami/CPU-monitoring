@@ -19,9 +19,8 @@ public class CpuUsageCollector {
         try {
             return operatingSystemMXBean.getSystemCpuLoad() * 100;
         } catch (Exception e) {
-            // 예외 처리
             log.error("Failed to get CPU usage Data : {}", e.getMessage());
-            return null; // 또는 다른 적절한 값
+            return null;
         }
     }
 }
