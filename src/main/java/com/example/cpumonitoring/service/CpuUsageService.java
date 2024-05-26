@@ -37,7 +37,7 @@ public class CpuUsageService {
     }
 
     //스케쥴러 사용 - 가져온 cpu 사용률 DB에 저장
-    @Scheduled(cron = "0 * * * * *") // 매 10초마다 실행
+    @Scheduled(cron = "0 * * * * *") // 매 분마다 실행
     public void saveCpuUsage() {
         try {
             Double cpuUsage = cpuUsageCollector.collectCpuUsage(); // CPU 사용률 수집 로직

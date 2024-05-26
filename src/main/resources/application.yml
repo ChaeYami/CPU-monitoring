@@ -18,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     #database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 logging:
   level:
