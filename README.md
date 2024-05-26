@@ -9,20 +9,20 @@
 
 2. Database Configuration:
 
-- application.yml 파일 > 데이터베이스 설정 확인:
-  ``` yml
-  spring:
-  datasource:
+    - application.yml 파일 > 데이터베이스 설정 확인:
+    ``` yml
+    spring:
+    datasource:
     url: jdbc:h2:tcp://localhost/~/cpumonitor
     driverClassName: org.h2.Driver
     username: ${H2_USERNAME}
     password: ${H2_PASSWORD}
-  ```
-- 프로젝트 root 경로 > 환경 변수 파일(.env) 생성 > 데이터베이스 username과 password 추가:
-  ```env
-  H2_USERNAME=
-  H2_PASSWORD=
-  ```
+    ```
+    - 프로젝트 root 경로 > 환경 변수 파일(.env) 생성 > 데이터베이스 username과 password 추가:
+    ```env
+    H2_USERNAME=
+    H2_PASSWORD=
+    ```
 
 3. Build and Run with Gradle:
     ```shell
@@ -68,34 +68,34 @@
     
   
 ### 데이터 조회 API
-1. 분 단위 CPU 사용률
+#### 1. 분 단위 CPU 사용률
    - 지정한 시간 구간의 분 단위 CPU 사용률 조회
    - 구간 시작 시각과 끝 시각을 매개변수로 받아 해당 구간의 데이터를 DB에서 조회해 List로 반환합니다.
 
-3. 시 단위 CPU 사용률
+#### 2. 시 단위 CPU 사용률
    - 특정 날짜의 시 단위 CPU 사용률 최소/최대/평균 조회
    - 특정 날짜를 매개변수로 받습니다.
    - 해당 날짜의 첫 시각(00:00)과 끝 시각을 사용해 JPA Repository로 DB에서 조회합니다.
    - 타임스탬프의 `getHour`을 사용해 각 데이터의 시간 정보를 추출하고, `stream`의 `collector`로 시간별 그룹핑합니다.
    - 각 시 단위의 최소, 최대값, 평균을 계산해 반환합니다. 
 
-5. 일 단위 CPU 사용률
+#### 3. 일 단위 CPU 사용률
    - 지정한 구간의 일 단위 CPU 사용률 최소/최대/평균 조회
    - 구간 시작 날짜와 끝 날짜를 매개변수로 받아 해당 구간의 데이터를 DB에서 조회합니다.
    - 끝 날짜의 데이터도 포함해 조회하기 위해 입력받은 끝 날짜에 `endDate.plusDays(1).atStartOfDay().minusNanos(1)` 처리 후 JPA Repository로 DB에서 조회합니다.
    - 타임스탬프의 `toLocalDate`를 사용해 조회한 데이터의 날짜 정보를 추출하고, `collector`로 날짜별 그룹핑합니다.
    - 각 일 단위의 최소, 최대값, 평균을 계산해 반환합니다. 
 
-6. 구간 CPU 사용률 List 의 최소, 최대, 평균값 구하는 메서드
+#### 4. 구간 CPU 사용률 List 의 최소, 최대, 평균값 구하는 메서드
    - 조회한 데이터 List 의 최소, 최대, 평균 구하는 메서드는 반복되므로 분리합니다.
    - 시 단위/일 단위 조회 메서드에서 사용합니다.
 
 ### 예외처리 
 
 ### 테스트
-1. Unit Test
+#### 1. Unit Test
 
-2. Integration Test
+#### 2. Integration Test
 
    
 
@@ -106,8 +106,8 @@
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
 ```
-#### method : GET
-#### Query Params : startTime, startTime
+- method : GET
+- Query Params : startTime, startTime
 <details>
 <summary>Example</summary>
 <div markdown = '1'></div>
@@ -153,8 +153,8 @@ GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
 ```
-#### method : GET
-#### Query Params : date
+- method : GET
+- Query Params : date
 <details>
 <summary>Example</summary>
 <div markdown = '1'></div>
@@ -185,8 +185,8 @@ GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
 ```
-#### method : GET
-#### Query Params : startDate, endDate
+- method : GET
+- Query Params : startDate, endDate
 <details>
 <summary>Example</summary>
 <div markdown = '1'></div>
