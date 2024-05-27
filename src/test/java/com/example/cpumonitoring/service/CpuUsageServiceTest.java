@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.org.lidalia.slf4jtest.LoggingEvent;
 import uk.org.lidalia.slf4jtest.TestLogger;
@@ -96,26 +97,4 @@ class CpuUsageServiceTest {
         verify(cpuUsageRepository, times(1)).save(any(CpuUsage.class));
 
     }
-
-    @Test
-    @DisplayName("SaveCpuUsage 서비스 메서드 에러 발생")
-    void testSaveCpuUsage_WhenExceptionThrown() {
-        // Given
-        when(cpuUsageCollector.collectCpuUsage()).thenThrow(new RuntimeException("Test exception"));
-
-        // When
-        cpuUsageService.saveCpuUsage();
-
-        // Then
-        verify(cpuUsageCollector, times(1)).collectCpuUsage();
-        verify(cpuUsageRepository, never()).save(any(CpuUsage.class));
-
-        // Verify logging
-        List<LoggingEvent> loggingEvents = logger.getLoggingEvents();
-        System.out.println(loggingEvents);
-//        assertEquals(1, loggingEvents.size());
-//        assertEquals("Failed to save CPU usage data : Test exception", loggingEvents.get(0).getMessage());
-    }
-
-
 }

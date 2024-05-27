@@ -1,5 +1,6 @@
 package com.example.cpumonitoring.component;
 
+import com.example.cpumonitoring.exception.CpuUsageCollectionException;
 import com.sun.management.OperatingSystemMXBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,7 @@ public class CpuUsageCollector {
         try {
             return operatingSystemMXBean.getSystemCpuLoad() * 100;
         } catch (Exception e) {
-            log.error("Failed to get CPU usage Data : {}", e.getMessage());
-            return null;
+            throw new CpuUsageCollectionException("Failed to collect CPU usage data", e);
         }
     }
 }

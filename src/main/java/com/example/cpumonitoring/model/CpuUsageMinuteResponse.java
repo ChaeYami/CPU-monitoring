@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+
 @AllArgsConstructor
 @Getter
 public class CpuUsageMinuteResponse {

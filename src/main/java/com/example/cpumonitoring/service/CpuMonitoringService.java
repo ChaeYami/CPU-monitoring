@@ -36,9 +36,10 @@ public class CpuMonitoringService {
     public CpuUsageMinuteResponse getCpuUsageByMinute(LocalDateTime startTime, LocalDateTime endTime) {
         // 데이터 제공 기한 : 최근 1주 (일주일 전 날짜의 자정으로 설정)
         LocalDateTime providedLimit = LocalDateTime.now().minusWeeks(1).with(LocalTime.MIN);
-        if (startTime.isBefore(providedLimit)) { // 시작 구간이 기한을 초과할 경우
+        /*if (startTime.isBefore(providedLimit)) { // 시작 구간이 기한을 초과할 경우
             startTime = providedLimit; // 시작 구간을 일주일 전으로 자동 조정
-        }
+        }*/
+        startTime = startTime.isBefore(providedLimit) ? providedLimit : startTime;
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(startTime, endTime);
 
         return new CpuUsageMinuteResponse(cpuUsages, startTime, endTime);
@@ -52,9 +53,10 @@ public class CpuMonitoringService {
     public CpuUsageHourResponse getCpuUsageStatsByHour(LocalDate date) {
         // 데이터 제공 기한 : 최근 3달
         LocalDate providedLimit = LocalDate.now().minus(3, ChronoUnit.MONTHS);
-        if (date.isBefore(providedLimit)) {
+        /*if (date.isBefore(providedLimit)) {
             date = providedLimit;
-        }
+        }*/
+        date = date.isBefore(providedLimit) ? providedLimit : date;
 
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
@@ -86,9 +88,10 @@ public class CpuMonitoringService {
         // 데이터 제공 기한 : 최근 1년
         LocalDate providedLimit = LocalDate.now().minusYears(1);
 
-        if (startDate.isBefore(providedLimit)) {
+        /*if (startDate.isBefore(providedLimit)) {
             startDate = providedLimit;
-        }
+        }*/
+        startDate = startDate.isBefore(providedLimit) ? providedLimit : startDate;
 
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(
                 startDate.atStartOfDay(),

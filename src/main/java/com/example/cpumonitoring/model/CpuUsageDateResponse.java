@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.util.Map;
 
-@Data
+
 @AllArgsConstructor
 @Getter
 public class CpuUsageDateResponse {
