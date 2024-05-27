@@ -1,6 +1,7 @@
 package com.example.cpumonitoring.service;
 
 import com.example.cpumonitoring.entity.CpuUsage;
+import com.example.cpumonitoring.exception.InvalidDateTimeRangeException;
 import com.example.cpumonitoring.model.CpuUsageDateResponse;
 import com.example.cpumonitoring.model.CpuUsageMinuteResponse;
 import com.example.cpumonitoring.model.CpuUsageHourResponse;
@@ -35,11 +36,13 @@ public class CpuMonitoringService {
      * @return 사용률 List
      */
     public CpuUsageMinuteResponse getCpuUsageByMinute(LocalDateTime startTime, LocalDateTime endTime) {
+        // 시작 시간이 종료 시간보다 뒷 시간인 경우
+        if (startTime.isAfter(endTime)) {
+            throw new InvalidDateTimeRangeException();
+        }
         // 데이터 제공 기한 : 최근 1주 (일주일 전 날짜의 자정으로 설정)
         LocalDateTime providedLimit = LocalDateTime.now().minusWeeks(1).with(LocalTime.MIN);
-        /*if (startTime.isBefore(providedLimit)) { // 시작 구간이 기한을 초과할 경우
-            startTime = providedLimit; // 시작 구간을 일주일 전으로 자동 조정
-        }*/
+        // 구간이 기한 초과시 자동 조절
         startTime = startTime.isBefore(providedLimit) ? providedLimit : startTime;
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(startTime, endTime);
 
@@ -54,9 +57,7 @@ public class CpuMonitoringService {
     public CpuUsageHourResponse getCpuUsageStatsByHour(LocalDate date) {
         // 데이터 제공 기한 : 최근 3달
         LocalDate providedLimit = LocalDate.now().minus(3, ChronoUnit.MONTHS);
-        /*if (date.isBefore(providedLimit)) {
-            date = providedLimit;
-        }*/
+        // 날짜가 기한 초과시 자동 조절
         date = date.isBefore(providedLimit) ? providedLimit : date;
 
         LocalDateTime startOfDay = date.atStartOfDay();
@@ -86,12 +87,14 @@ public class CpuMonitoringService {
      * @return 사용률 List
      */
     public CpuUsageDateResponse getCpuUsageStatsByDay(LocalDate startDate, LocalDate endDate) {
+        // 시작 날짜가 종료 날짜보다 뒤인 경우
+        if (startDate.isAfter(endDate)) {
+            throw new InvalidDateTimeRangeException();
+        }
         // 데이터 제공 기한 : 최근 1년
         LocalDate providedLimit = LocalDate.now().minusYears(1);
 
-        /*if (startDate.isBefore(providedLimit)) {
-            startDate = providedLimit;
-        }*/
+        // 구간이 기한 초과시 자동 조절
         startDate = startDate.isBefore(providedLimit) ? providedLimit : startDate;
 
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(

@@ -1,6 +1,7 @@
 package com.example.cpumonitoring.config;
 
 import com.example.cpumonitoring.exception.CpuUsageCollectionException;
+import com.example.cpumonitoring.exception.InvalidDateTimeRangeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCpuUsageCollectionException(CpuUsageCollectionException ex) {
         log.error("Failed to collect CPU usage data: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to collect CPU usage data");
+    }
+
+    @ExceptionHandler(InvalidDateTimeRangeException.class)
+    public ResponseEntity<String> handleInvalidDateRangeException(InvalidDateTimeRangeException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
