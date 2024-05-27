@@ -9,27 +9,48 @@
 
 2. Database Configuration:
 
-    - application.yml 파일 > 데이터베이스 설정 확인:
+    - resources 디렉토리 > 데이터베이스 설정 확인:
     ``` yml
+    # application-dev.yml
+
+    datasource:
+        # H2 DB
+        url: jdbc:h2:tcp://localhost/~/cpumonitor
+        driverClassName: org.h2.Driver
+        username: ${H2_USERNAME}
+        password: ${H2_PASSWORD}
+    ```
+    ``` yml
+    # application-prod.yml
+    
     spring:
     datasource:
-    url: jdbc:h2:tcp://localhost/~/cpumonitor
-    driverClassName: org.h2.Driver
-    username: ${H2_USERNAME}
-    password: ${H2_PASSWORD}
+        # mariaDB
+        url: jdbc:mariadb://localhost:3307/cpu_monitor?serverTimezone=UTC&characterEncoding=UTF-8
+        driverClassName: org.mariadb.jdbc.Driver
+        username: ${MARIA_USERNAME}
+        password: ${MARIA_PASSWORD}
+
     ```
     - 프로젝트 root 경로 > 환경 변수 파일(.env) 생성 > 데이터베이스 username과 password 추가:
     ```env
     H2_USERNAME=
     H2_PASSWORD=
+    MARIA_USERNAME=
+    MARIA_PASSWORD=
     ```
 
 3. Build and Run with Gradle:
+    - 개발환경 실행 
     ```shell
-    ./gradlew bootRun
+    ./gradlew bootRun --args='--spring.profiles.active=dev'
     ```
+    - 운용환경 실행
+    ```shell
+    ./gradlew bootRun --args='--spring.profiles.active=prod'
+    ```  
 
-4. Swagger Documentation:
+5. Swagger Documentation:
     ```url
     http://localhost:8080/swagger-ui/index.html
     ```
