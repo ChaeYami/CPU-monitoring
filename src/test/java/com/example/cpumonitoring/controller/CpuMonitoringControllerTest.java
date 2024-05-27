@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(CpuMonitoringController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class CpuMonitoringControllerTest {
     @Autowired
@@ -101,8 +102,8 @@ class CpuMonitoringControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.cpuUsage", hasSize(2)))
-                .andExpect(jsonPath("$.cpuUsage[0].usage").value("30.0%"))
-                .andExpect(jsonPath("$.cpuUsage[1].usage").value("40.0%"));
+                .andExpect(jsonPath("$.cpuUsage[0].cpuUsage").value("30.0%"))
+                .andExpect(jsonPath("$.cpuUsage[1].cpuUsage").value("40.0%"));
     }
 
     @Test

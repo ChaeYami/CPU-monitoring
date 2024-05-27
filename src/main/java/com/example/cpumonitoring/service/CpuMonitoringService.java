@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -113,19 +114,12 @@ public class CpuMonitoringService {
 
     // 구간 CPU 사용률 List 의 최소, 최대, 평균값 구하는 메서드
     private CpuUsageStats calculateUsageStats(List<CpuUsage> usageList) {
-        double minUsage = usageList.stream()
+        DoubleSummaryStatistics stats = usageList.stream()
                 .mapToDouble(usage -> parseUsage(usage.getCpuUsage()))
-                .min()
-                .orElse(0);
-        double maxUsage = usageList.stream()
-                .mapToDouble(usage -> parseUsage(usage.getCpuUsage()))
-                .max()
-                .orElse(0);
-        double averageUsage = usageList.stream()
-                .mapToDouble(usage -> parseUsage(usage.getCpuUsage()))
-                .average()
-                .orElse(0);
-        averageUsage = Math.round(averageUsage * 100.0) / 100.0;
+                .summaryStatistics();
+        double minUsage = stats.getMin();
+        double maxUsage = stats.getMax();
+        double averageUsage = Math.round(stats.getAverage() * 100.0) / 100.0;
         return new CpuUsageStats(minUsage, maxUsage, averageUsage);
     }
 
