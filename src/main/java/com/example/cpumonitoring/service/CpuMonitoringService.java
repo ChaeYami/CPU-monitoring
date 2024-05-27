@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +41,16 @@ public class CpuMonitoringService {
         if (startTime.isAfter(endTime)) {
             throw new InvalidDateTimeRangeException();
         }
+        // 종료 시간이 현재보다 뒤인 경우
+        if (endTime.isAfter(LocalDateTime.now())) {
+            throw new InvalidDateTimeRangeException("endTime after current time cannot be specified.");
+        }
         // 데이터 제공 기한 : 최근 1주 (일주일 전 날짜의 자정으로 설정)
         LocalDateTime providedLimit = LocalDateTime.now().minusWeeks(1).with(LocalTime.MIN);
+
         // 구간이 기한 초과시 자동 조절
         startTime = startTime.isBefore(providedLimit) ? providedLimit : startTime;
+
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(startTime, endTime);
 
         return new CpuUsageMinuteResponse(cpuUsages, startTime, endTime);
@@ -55,13 +62,15 @@ public class CpuMonitoringService {
      * @return 사용률 List
      */
     public CpuUsageHourResponse getCpuUsageStatsByHour(LocalDate date) {
-        // 데이터 제공 기한 : 최근 3달
-        LocalDate providedLimit = LocalDate.now().minus(3, ChronoUnit.MONTHS);
-        // 날짜가 기한 초과시 자동 조절
-        date = date.isBefore(providedLimit) ? providedLimit : date;
+        LocalDate adjustedDate = adjustDate(date, 3, ChronoUnit.MONTHS);
 
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+        // 날짜가 오늘보다 뒤인 경우
+        if (date.isAfter(LocalDate.now())) {
+            throw new InvalidDateTimeRangeException("date after today cannot be specified.");
+        }
+
+        LocalDateTime startOfDay = adjustedDate.atStartOfDay();
+        LocalDateTime endOfDay = adjustedDate.atTime(LocalTime.MAX);
 
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(startOfDay, endOfDay);
 
@@ -77,7 +86,7 @@ public class CpuMonitoringService {
                                 this::calculateUsageStats
                         )
                 ));
-        return new CpuUsageHourResponse(returnCpuUsages, date);
+        return new CpuUsageHourResponse(returnCpuUsages, adjustedDate);
     }
 
     /**
@@ -91,14 +100,14 @@ public class CpuMonitoringService {
         if (startDate.isAfter(endDate)) {
             throw new InvalidDateTimeRangeException();
         }
-        // 데이터 제공 기한 : 최근 1년
-        LocalDate providedLimit = LocalDate.now().minusYears(1);
-
-        // 구간이 기한 초과시 자동 조절
-        startDate = startDate.isBefore(providedLimit) ? providedLimit : startDate;
+        // 종료 날짜가 오늘보다 뒤인 경우
+        if (endDate.isAfter(LocalDate.now())) {
+            throw new InvalidDateTimeRangeException("endDate after today cannot be specified.");
+        }
+        LocalDate adjustedStartDate = adjustDate(startDate, 1, ChronoUnit.YEARS);
 
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(
-                startDate.atStartOfDay(),
+                adjustedStartDate.atStartOfDay(),
                 endDate.plusDays(1).atStartOfDay().minusNanos(1)
         );
 
@@ -112,7 +121,16 @@ public class CpuMonitoringService {
                         )
                 ));
 
-        return new CpuUsageDateResponse(returnCpuUsages, startDate, endDate);
+        return new CpuUsageDateResponse(returnCpuUsages, adjustedStartDate, endDate);
+    }
+
+    // 제공기한 초과시 자동 조절하는 메서드
+    public LocalDate adjustDate(LocalDate date, int limit, TemporalUnit unit) {
+        LocalDate providedLimit = LocalDate.now().minus(limit, unit);
+        // 날짜가 기한 초과시 자동 조절
+        date = date.isBefore(providedLimit) ? providedLimit : date;
+
+        return date;
     }
 
     // 구간 CPU 사용률 List 의 최소, 최대, 평균값 구하는 메서드
