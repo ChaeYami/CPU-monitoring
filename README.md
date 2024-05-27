@@ -274,110 +274,111 @@ GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00
 ```
 - **method : GET**
 - **Query Params : startTime, startTime**
-<details>
-<summary>Example : Success</summary>
-<div markdown = '1'></div>
-
-- Request
   
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
-  ```
-- Response
-
-  > Status Code : 200 OK
-  ```json
-     {
-        "cpuUsage": [
-            {
-                "id": 1,
-                "usage": "4.67%",
-                "timestamp": "2024-05-26T06:11:16"
-            },
-            {
-                "id": 2,
-                "usage": "9.41%",
-                "timestamp": "2024-05-26T06:12:00"
-            },
-            {
-                "id": 3,
-                "usage": "3.31%",
-                "timestamp": "2024-05-26T06:13:00"
-            },
-            {
-                "id": 4,
-                "usage": "8.56%",
-                "timestamp": "2024-05-26T06:14:00"
-            },
-            {
-                "id": 5,
-                "usage": "8.58%",
-                "timestamp": "2024-05-26T06:15:00"
-            },
-            {
-                "id": 6,
-                "usage": "5.78%",
-                "timestamp": "2024-05-26T06:19:25"
-            },
-            {
-                "id": 7,
-                "usage": "21.40%",
-                "timestamp": "2024-05-26T06:20:00"
-            },
-            {
-                "id": 8,
-                "usage": "14.03%",
-                "timestamp": "2024-05-26T06:21:00"
-            },
-            {
-                "id": 9,
-                "usage": "9.83%",
-                "timestamp": "2024-05-26T06:22:00"
-            },
-        ],
-        "startTime": "2024-05-26T05:00:00",
-        "endTime": "2024-05-27T18:00:00"
-    }
-  ```
-</details>
-
-<details>
-<summary>Example : Invalid parameter</summary>
-<div markdown = '1'></div>
-
-- Request
-  
-    > startTime : 2024-05-27 -> DateTime 파라미터에 Date 넣어 요청 
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-27&endTime=2024-05-27T23:50:00
-  ```
-- Response
-
-  > Status Code : 400 Bad Request
-  ```
-  Invalid parameter: startTime
-  ```
-</details>
-
-<details>
-<summary>Example : Invalid DateTimeRange</summary>
-<div markdown = '1'></div>
-
-- Request
-  
-    > startTime : 2024-05-28T01:30:00   
-    > endTime : 2024-05-28T01:00:00   
-    > -> 시작 시간이 종료 시간보다 뒤인 경우   
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-28T01:30:00&endTime=2024-05-28T01:00:00
-  ```
-- Response
-
-  > Status Code : 400 Bad Request
-  ```
-  startDate(startTime) cannot be after endDate(endTime)
-  ```
-</details>
+    <details>
+    <summary>Example : Success</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
+      ```
+    - Response
+    
+      > Status Code : 200 OK
+      ```json
+         {
+            "cpuUsage": [
+                {
+                    "id": 1,
+                    "usage": "4.67%",
+                    "timestamp": "2024-05-26T06:11:16"
+                },
+                {
+                    "id": 2,
+                    "usage": "9.41%",
+                    "timestamp": "2024-05-26T06:12:00"
+                },
+                {
+                    "id": 3,
+                    "usage": "3.31%",
+                    "timestamp": "2024-05-26T06:13:00"
+                },
+                {
+                    "id": 4,
+                    "usage": "8.56%",
+                    "timestamp": "2024-05-26T06:14:00"
+                },
+                {
+                    "id": 5,
+                    "usage": "8.58%",
+                    "timestamp": "2024-05-26T06:15:00"
+                },
+                {
+                    "id": 6,
+                    "usage": "5.78%",
+                    "timestamp": "2024-05-26T06:19:25"
+                },
+                {
+                    "id": 7,
+                    "usage": "21.40%",
+                    "timestamp": "2024-05-26T06:20:00"
+                },
+                {
+                    "id": 8,
+                    "usage": "14.03%",
+                    "timestamp": "2024-05-26T06:21:00"
+                },
+                {
+                    "id": 9,
+                    "usage": "9.83%",
+                    "timestamp": "2024-05-26T06:22:00"
+                },
+            ],
+            "startTime": "2024-05-26T05:00:00",
+            "endTime": "2024-05-27T18:00:00"
+        }
+      ```
+    </details>
+    
+    <details>
+    <summary>Example : Invalid parameter</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+        > startTime : 2024-05-27 -> DateTime 파라미터에 Date 넣어 요청 
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-27&endTime=2024-05-27T23:50:00
+      ```
+    - Response
+    
+      > Status Code : 400 Bad Request
+      ```
+      Invalid parameter: startTime
+      ```
+    </details>
+    
+    <details>
+    <summary>Example : Invalid DateTimeRange</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+        > startTime : 2024-05-28T01:30:00   
+        > endTime : 2024-05-28T01:00:00   
+        > -> 시작 시간이 종료 시간보다 뒤인 경우   
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-28T01:30:00&endTime=2024-05-28T01:00:00
+      ```
+    - Response
+    
+      > Status Code : 400 Bad Request
+      ```
+      startDate(startTime) cannot be after endDate(endTime)
+      ```
+    </details>
     
     
 ### 시 단위 조회
@@ -386,64 +387,65 @@ GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
 ```
 - **method : GET**
 - **Query Params : date**
-<details>
-<summary>Example : Success</summary>
-<div markdown = '1'></div>
-
-- Request
   
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
-  ```
-- Response
-
-  > Status Code : 200 OK
-  ```json
-    {
-        "cpuUsage": {
-            "2024-05-27T02:00": {
-                "minUsage": 4.02,
-                "maxUsage": 4.02,
-                "averageUsage": 4.02
+    <details>
+    <summary>Example : Success</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
+      ```
+    - Response
+    
+      > Status Code : 200 OK
+      ```json
+        {
+            "cpuUsage": {
+                "2024-05-27T02:00": {
+                    "minUsage": 4.02,
+                    "maxUsage": 4.02,
+                    "averageUsage": 4.02
+                },
+                "2024-05-27T03:00": {
+                    "minUsage": 4.13,
+                    "maxUsage": 14.35,
+                    "averageUsage": 8.06
+                },
+                "2024-05-27T04:00": {
+                    "minUsage": 5.06,
+                    "maxUsage": 77.34,
+                    "averageUsage": 24.95
+                },
+                "2024-05-27T05:00": {
+                    "minUsage": 5.7,
+                    "maxUsage": 28.67,
+                    "averageUsage": 17.19
+                },
             },
-            "2024-05-27T03:00": {
-                "minUsage": 4.13,
-                "maxUsage": 14.35,
-                "averageUsage": 8.06
-            },
-            "2024-05-27T04:00": {
-                "minUsage": 5.06,
-                "maxUsage": 77.34,
-                "averageUsage": 24.95
-            },
-            "2024-05-27T05:00": {
-                "minUsage": 5.7,
-                "maxUsage": 28.67,
-                "averageUsage": 17.19
-            },
-        },
-        "date": "2024-05-27"
-    }
-  ```
-</details>
-
-<details>
-<summary>Example : Invalid parameter</summary>
-<div markdown = '1'></div>
-
-- Request
-  
-    > date : 2024 -> Date 형식 불일치 
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024
-  ```
-- Response
-
-  > Status Code : 400 Bad Request
-  ```
-  Invalid parameter: date
-  ```
-</details>
+            "date": "2024-05-27"
+        }
+      ```
+    </details>
+    
+    <details>
+    <summary>Example : Invalid parameter</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+        > date : 2024 -> Date 형식 불일치 
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024
+      ```
+    - Response
+    
+      > Status Code : 400 Bad Request
+      ```
+      Invalid parameter: date
+      ```
+    </details>
      
 ### 일 단위 조회
 ```url
@@ -451,72 +453,73 @@ GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=202
 ```
 - **method : GET**
 - **Query Params : startDate, endDate**
-<details>
-<summary>Example : Success</summary>
-<div markdown = '1'></div>
-
-- Request
   
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
-  ```
-- Response
-
-  > Status Code : 200 OK
-  ```json
-    {
-        "cpuUsage": {
-            "2024-05-26": {
-                "minUsage": 2.99,
-                "maxUsage": 27.69,
-                "averageUsage": 9.35
+    <details>
+    <summary>Example : Success</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
+      ```
+    - Response
+    
+      > Status Code : 200 OK
+      ```json
+        {
+            "cpuUsage": {
+                "2024-05-26": {
+                    "minUsage": 2.99,
+                    "maxUsage": 27.69,
+                    "averageUsage": 9.35
+                },
+                "2024-05-27": {
+                    "minUsage": 4.02,
+                    "maxUsage": 77.34,
+                    "averageUsage": 14.92
+                }
             },
-            "2024-05-27": {
-                "minUsage": 4.02,
-                "maxUsage": 77.34,
-                "averageUsage": 14.92
-            }
-        },
-        "startDate": "2024-05-26",
-        "endDate": "2024-05-27"
-    }
-  ```
-</details>
-
-<details>
-<summary>Example : Invalid parameter</summary>
-<div markdown = '1'></div>
-
-- Request
-  
-    > startDate : 2022 -> Date 형식 불일치 
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2022&endDate=2024-05-27
-  ```
-- Response
-
-  > Status Code : 400 Bad Request
-  ```
-  Invalid parameter: startDate
-  ```
-</details>
-
-<details>
-<summary>Example : Invalid DateTimeRange</summary>
-<div markdown = '1'></div>
-
-- Request
-  
-    > startDate : 2024-05-28   
-    > endDate : 2024-05-27   
-    > -> 시작 날짜가 종료 날짜보다 뒤인 경우   
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-28&endDate=2024-05-27
-  ```
-- Response
-
-  > Status Code : 400 Bad Request
-  ```
-  startDate(startTime) cannot be after endDate(endTime)
-  ```
-</details>
+            "startDate": "2024-05-26",
+            "endDate": "2024-05-27"
+        }
+      ```
+    </details>
+    
+    <details>
+    <summary>Example : Invalid parameter</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+        > startDate : 2022 -> Date 형식 불일치 
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2022&endDate=2024-05-27
+      ```
+    - Response
+    
+      > Status Code : 400 Bad Request
+      ```
+      Invalid parameter: startDate
+      ```
+    </details>
+    
+    <details>
+    <summary>Example : Invalid DateTimeRange</summary>
+    <div markdown = '1'></div>
+    
+    - Request
+      
+        > startDate : 2024-05-28   
+        > endDate : 2024-05-27   
+        > -> 시작 날짜가 종료 날짜보다 뒤인 경우   
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-28&endDate=2024-05-27
+      ```
+    - Response
+    
+      > Status Code : 400 Bad Request
+      ```
+      startDate(startTime) cannot be after endDate(endTime)
+      ```
+    </details>
