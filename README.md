@@ -24,7 +24,6 @@
     ``` yml
     # application-prod.yml
     
-    spring:
     datasource:
         # mariaDB
         url: jdbc:mariadb://localhost:3307/cpu_monitor?serverTimezone=UTC&characterEncoding=UTF-8
