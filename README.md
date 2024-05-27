@@ -165,58 +165,73 @@
    - 시 단위/일 단위 조회 메서드에서 사용합니다.   
 
 #### 5. 데이터 제공 기한
-<details>
-<summary> 상세보기 </summary>
-<div markdown = '1'></div>
+- 조회하려는 시간(날짜) 범위 또는 날짜가 제공 기한을 초과할 경우
 
-    - 조회하려는 시간,날짜의 구간 또는 날짜가 제공 기한을 초과할 경우, 자동으로 제공 기한까지 조정 및 조회
-
-    - 분 단위 API : 최근 1주 데이터 제공, 일주일 전 날짜의 00시부터
-    - 시 단위 API : 최근 3달 데이터 제공
-    - 일 단위 API : 최근 1년 데이터 제공
-</details>
-
-<details>
-<summary>ex) [분 단위 조회] 최근 1주보다 이전 시각을 시작 구간으로 설정할 경우</summary>
-<div markdown = '1'></div>
-  
-- Query Params :
-    - startTime : **2023-05-26**T05:00:00,
-    - endTime : 2024-05-27T18:00:00
-  
-- Request
-  
-  ```url
-  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2023-05-26T05:00:00&endTime=2024-05-27T18:00:00
-  ```
-- Response
-  
-  ```jsonc
-    {
-        "cpuUsage": [
-            {
-                "id": 1,
-                "usage": "4.67%",
-                "timestamp": "2024-05-26T06:11:16"
-            },
-            {
-                "id": 2,
-                "usage": "9.41%",
-                "timestamp": "2024-05-26T06:12:00"
-            },
-            // .. 생략 ..
-            {
-                "id": 58,
-                "usage": "13.16%",
-                "timestamp": "2024-05-27T16:33:00"
-            }
-        ],
-        "startTime": "2024-05-20T00:00:00", // 자동으로 오늘로부터 일주일 전으로 시작 구간 설정
-        "endTime": "2024-05-27T18:00:00"
-    }
-  ```
-</details>
+- 시작 시간(날짜)을 자동으로 제공 기한까지 조정 및 조회
+-   <details>
+    <summary> 제공 기한 </summary>
+    <div markdown = '1'></div>
     
+        - 분 단위 API : 최근 1주 데이터 제공, (일주일 전 날짜의 00시부터)
+        - 시 단위 API : 최근 3달 데이터 제공
+        - 일 단위 API : 최근 1년 데이터 제공
+    </details>
+
+- ex) 분 단위 조회의 경우
+  
+    <details>
+    <summary> 서비스 메서드 </summary>
+    <div markdown = '1'></div>
+    
+    ``` java
+    // 데이터 제공 기한 : 최근 1주 (일주일 전 날짜의 자정으로 설정)
+    LocalDateTime providedLimit = LocalDateTime.now().minusWeeks(1).with(LocalTime.MIN);
+    // 구간이 기한 초과시 자동 조절
+    startTime = startTime.isBefore(providedLimit) ? providedLimit : startTime;
+    ```
+    </details>
+    
+    <details>
+    <summary>[API] 최근 1주보다 이전 시각을 시작 구간으로 설정할 경우</summary>
+    <div markdown = '1'></div>
+      
+    - Query Params :
+        - startTime : **2023-05-26**T05:00:00,
+        - endTime : 2024-05-27T18:00:00
+      
+    - Request
+      
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2023-05-26T05:00:00&endTime=2024-05-27T18:00:00
+      ```
+    - Response
+      
+      ```jsonc
+        {
+            "cpuUsage": [
+                {
+                    "id": 1,
+                    "usage": "4.67%",
+                    "timestamp": "2024-05-26T06:11:16"
+                },
+                {
+                    "id": 2,
+                    "usage": "9.41%",
+                    "timestamp": "2024-05-26T06:12:00"
+                },
+                // .. 생략 ..
+                {
+                    "id": 58,
+                    "usage": "13.16%",
+                    "timestamp": "2024-05-27T16:33:00"
+                }
+            ],
+            "startTime": "2024-05-20T00:00:00", // 자동으로 오늘로부터 일주일 전으로 시작 구간 설정
+            "endTime": "2024-05-27T18:00:00"
+        }
+      ```
+    </details>
+        
 
 ### 예외처리 
 #### 1. 데이터 수집 시 예외처리
