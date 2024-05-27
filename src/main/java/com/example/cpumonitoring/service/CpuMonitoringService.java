@@ -118,16 +118,12 @@ public class CpuMonitoringService {
     // 구간 CPU 사용률 List 의 최소, 최대, 평균값 구하는 메서드
     private CpuUsageStats calculateUsageStats(List<CpuUsage> usageList) {
         DoubleSummaryStatistics stats = usageList.stream()
-                .mapToDouble(usage -> parseUsage(usage.getCpuUsage()))
+                .mapToDouble(usage -> usage.getCpuUsage())
                 .summaryStatistics();
         double minUsage = stats.getMin();
         double maxUsage = stats.getMax();
         double averageUsage = Math.round(stats.getAverage() * 100.0) / 100.0;
         return new CpuUsageStats(minUsage, maxUsage, averageUsage);
-    }
-
-    private double parseUsage(String usage) {
-        return Double.parseDouble(usage.replace("%", ""));
     }
 
 }

@@ -40,9 +40,9 @@ class CpuMonitoringServiceTest {
         LocalDateTime startTime = LocalDateTime.now().minusMinutes(30);
         LocalDateTime endTime = LocalDateTime.now();
         List<CpuUsage> fakeData = Arrays.asList(
-                new CpuUsage("50%", LocalDateTime.now().minusMinutes(20)),
-                new CpuUsage("60%", LocalDateTime.now().minusMinutes(15)),
-                new CpuUsage("70%", LocalDateTime.now().minusMinutes(10))
+                new CpuUsage(50, LocalDateTime.now().minusMinutes(20)),
+                new CpuUsage(60, LocalDateTime.now().minusMinutes(15)),
+                new CpuUsage(70, LocalDateTime.now().minusMinutes(10))
         );
         when(cpuUsageRepository.findByTimestampBetween(startTime, endTime)).thenReturn(fakeData);
 
@@ -59,9 +59,9 @@ class CpuMonitoringServiceTest {
         // Given
         LocalDate date = LocalDate.now();
         List<CpuUsage> fakeData = Arrays.asList(
-                new CpuUsage("50%", LocalDateTime.now().minusHours(2)),
-                new CpuUsage("60%", LocalDateTime.now().minusHours(1)),
-                new CpuUsage("70%", LocalDateTime.now())
+                new CpuUsage(50, LocalDateTime.now().minusHours(2)),
+                new CpuUsage(60, LocalDateTime.now().minusHours(1)),
+                new CpuUsage(70, LocalDateTime.now())
         );
         when(cpuUsageRepository.findByTimestampBetween(any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(fakeData);
 
@@ -79,9 +79,9 @@ class CpuMonitoringServiceTest {
         LocalDate startDate = LocalDate.now().minusDays(1);
         LocalDate endDate = LocalDate.now();
         List<CpuUsage> fakeData = Arrays.asList(
-                new CpuUsage("50%", LocalDateTime.now().minusDays(1).plusHours(2)),
-                new CpuUsage("60%", LocalDateTime.now().minusDays(1).plusHours(3)),
-                new CpuUsage("70%", LocalDateTime.now().minusDays(1).plusHours(4))
+                new CpuUsage(50, LocalDateTime.now().minusDays(1).plusHours(2)),
+                new CpuUsage(60, LocalDateTime.now().minusDays(1).plusHours(3)),
+                new CpuUsage(70, LocalDateTime.now().minusDays(1).plusHours(4))
         );
         when(cpuUsageRepository.findByTimestampBetween(any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(fakeData);
 

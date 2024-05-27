@@ -10,4 +10,6 @@ public interface CpuUsageRepository extends JpaRepository<CpuUsage, Long> {
 
     List<CpuUsage> findByTimestampBetween(LocalDateTime start, LocalDateTime end);
 
+
+
 }

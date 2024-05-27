@@ -55,9 +55,9 @@ public class CpuUsageService {
 
     }
 
-    // cpu 사용률 포맷 - 소수점 셋째자리에서 반올림 후 % ex) 7.93%
-    private String formatCpuUsage(double cpuUsage) {
+    // cpu 사용률 포맷 - 소수점 셋째자리에서 반올림
+    private double formatCpuUsage(double cpuUsage) {
         BigDecimal newUsage = new BigDecimal(cpuUsage).setScale(2, RoundingMode.HALF_UP);
-        return newUsage.toString() + "%";
+        return newUsage.doubleValue();
     }
 }

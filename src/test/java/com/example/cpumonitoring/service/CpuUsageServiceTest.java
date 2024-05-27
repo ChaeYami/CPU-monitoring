@@ -47,7 +47,7 @@ class CpuUsageServiceTest {
     @DisplayName("DB 저장")
     void testSaveCpuUsage() {
         // Given
-        CpuUsage cpuUsage = new CpuUsage("7.93%", LocalDateTime.now());
+        CpuUsage cpuUsage = new CpuUsage(7.93, LocalDateTime.now());
         when(cpuUsageRepository.save(cpuUsage)).thenReturn(cpuUsage);
 
         // When
@@ -55,7 +55,7 @@ class CpuUsageServiceTest {
 
         // Then
         assertNotNull(savedCpuUsage);
-        assertEquals("7.93%", savedCpuUsage.getCpuUsage());
+        assertEquals(7.93, savedCpuUsage.getCpuUsage());
         verify(cpuUsageRepository, times(1)).save(cpuUsage);
     }
 
@@ -65,8 +65,8 @@ class CpuUsageServiceTest {
         // Given
         LocalDateTime start = LocalDateTime.now().minusDays(1);
         LocalDateTime end = LocalDateTime.now();
-        CpuUsage cpuUsage1 = new CpuUsage("7.93%", start.plusHours(1));
-        CpuUsage cpuUsage2 = new CpuUsage("6.75%", start.plusHours(2));
+        CpuUsage cpuUsage1 = new CpuUsage(7.93, start.plusHours(1));
+        CpuUsage cpuUsage2 = new CpuUsage(6.75, start.plusHours(2));
         List<CpuUsage> expectedUsages = Arrays.asList(cpuUsage1, cpuUsage2);
 
         when(cpuUsageRepository.findByTimestampBetween(start, end)).thenReturn(expectedUsages);
@@ -76,8 +76,8 @@ class CpuUsageServiceTest {
 
         // Then
         assertEquals(2, foundUsages.size());
-        assertEquals("7.93%", foundUsages.get(0).getCpuUsage());
-        assertEquals("6.75%", foundUsages.get(1).getCpuUsage());
+        assertEquals(7.93, foundUsages.get(0).getCpuUsage());
+        assertEquals(6.75, foundUsages.get(1).getCpuUsage());
         verify(cpuUsageRepository, times(1)).findByTimestampBetween(start, end);
     }
 

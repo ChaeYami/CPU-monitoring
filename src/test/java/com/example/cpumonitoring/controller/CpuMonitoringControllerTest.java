@@ -52,8 +52,8 @@ class CpuMonitoringControllerTest {
 
         // 분 단위 조회 데이터 설정
         List<CpuUsage> cpuUsagesByMinute = new ArrayList<>();
-        cpuUsagesByMinute.add(new CpuUsage("30.0%", LocalDateTime.now().minusMinutes(30)));
-        cpuUsagesByMinute.add(new CpuUsage("40.0%", LocalDateTime.now().minusMinutes(15)));
+        cpuUsagesByMinute.add(new CpuUsage(30.0, LocalDateTime.now().minusMinutes(30)));
+        cpuUsagesByMinute.add(new CpuUsage(40.0, LocalDateTime.now().minusMinutes(15)));
         Mockito.when(cpuMonitoringService.getCpuUsageByMinute(any(), any()))
                 .thenReturn(new CpuUsageMinuteResponse(cpuUsagesByMinute, startTime, endTime));
 
@@ -70,8 +70,7 @@ class CpuMonitoringControllerTest {
             cpuUsagesByHour.put(currentHour, stats);
             currentHour = currentHour.plusHours(1);
         }
-
-        Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any()))
+      Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any()))
                 .thenReturn(new CpuUsageHourResponse(cpuUsagesByHour, date));
 
         Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any()))
@@ -86,9 +85,9 @@ class CpuMonitoringControllerTest {
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
         List<CpuUsage> cpuUsagesByDay = new ArrayList<>();
-        cpuUsagesByDay.add(new CpuUsage("25.0%", LocalDateTime.now().minusDays(2)));
-        cpuUsagesByDay.add(new CpuUsage("35.0%", LocalDateTime.now().minusDays(1)));
-        cpuUsagesByDay.add(new CpuUsage("45.0%", LocalDateTime.now()));
+        cpuUsagesByDay.add(new CpuUsage(25.0, LocalDateTime.now().minusDays(2)));
+        cpuUsagesByDay.add(new CpuUsage(35.0, LocalDateTime.now().minusDays(1)));
+        cpuUsagesByDay.add(new CpuUsage(45.0, LocalDateTime.now()));
         Mockito.when(cpuMonitoringService.getCpuUsageStatsByDay(any(), any()))
                 .thenReturn(new CpuUsageDateResponse(cpuUsageStatsByDay, startDate, endDate));
     }
@@ -102,8 +101,8 @@ class CpuMonitoringControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.cpuUsage", hasSize(2)))
-                .andExpect(jsonPath("$.cpuUsage[0].cpuUsage").value("30.0%"))
-                .andExpect(jsonPath("$.cpuUsage[1].cpuUsage").value("40.0%"));
+                .andExpect(jsonPath("$.cpuUsage[0].cpuUsage").value(30.0))
+                .andExpect(jsonPath("$.cpuUsage[1].cpuUsage").value(40.0));
     }
 
     @Test
@@ -114,18 +113,18 @@ class CpuMonitoringControllerTest {
                         .param("date", date.toString())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.cpuUsage", hasKey("2024-05-27T00:00")))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].minUsage").value(10.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].maxUsage").value(20.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].averageUsage").value(15.0))
-                .andExpect(jsonPath("$.cpuUsage", hasKey("2024-05-27T01:00")))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].minUsage").value(10.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].maxUsage").value(30.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].averageUsage").value(20.0))
-                .andExpect(jsonPath("$.cpuUsage", hasKey("2024-05-27T02:00")))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].minUsage").value(10.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].maxUsage").value(40.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].averageUsage").value(25.0));
+                .andExpect(jsonPath("$.cpuUsage", hasKey(date.toString() + "T00:00")))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T00:00'].minUsage").value(10.0))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T00:00'].maxUsage").value(20.0))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T00:00'].averageUsage").value(15.0))
+                .andExpect(jsonPath("$.cpuUsage", hasKey(date.toString() + "T01:00")))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T01:00'].minUsage").value(10.0))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T01:00'].maxUsage").value(30.0))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T01:00'].averageUsage").value(20.0))
+                .andExpect(jsonPath("$.cpuUsage", hasKey(date.toString() + "T02:00")))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T02:00'].minUsage").value(10.0))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T02:00'].maxUsage").value(40.0))
+                .andExpect(jsonPath("$.cpuUsage['" + date.toString() + "T02:00'].averageUsage").value(25.0));
     }
 
 

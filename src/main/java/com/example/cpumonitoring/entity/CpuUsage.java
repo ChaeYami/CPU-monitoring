@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,11 +19,11 @@ public class CpuUsage {
     @Column(name = "id")
     private Long id;
 
-    private String cpuUsage;
+    private double  cpuUsage;
 
     private LocalDateTime timestamp;
 
-    public CpuUsage(String cpuUsage, LocalDateTime timestamp) {
+    public CpuUsage(double cpuUsage, LocalDateTime timestamp) {
         this.cpuUsage = cpuUsage;
         this.timestamp = timestamp;
     }
