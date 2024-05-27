@@ -54,7 +54,7 @@ class CpuUsageServiceTest {
 
         // Then
         assertNotNull(savedCpuUsage);
-        assertEquals("7.93%", savedCpuUsage.getUsage());
+        assertEquals("7.93%", savedCpuUsage.getCpuUsage());
         verify(cpuUsageRepository, times(1)).save(cpuUsage);
     }
 
@@ -75,8 +75,8 @@ class CpuUsageServiceTest {
 
         // Then
         assertEquals(2, foundUsages.size());
-        assertEquals("7.93%", foundUsages.get(0).getUsage());
-        assertEquals("6.75%", foundUsages.get(1).getUsage());
+        assertEquals("7.93%", foundUsages.get(0).getCpuUsage());
+        assertEquals("6.75%", foundUsages.get(1).getCpuUsage());
         verify(cpuUsageRepository, times(1)).findByTimestampBetween(start, end);
     }
 

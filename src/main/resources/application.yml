@@ -5,24 +5,6 @@ spring:
   profiles:
     include: file:.env
 
-  datasource:
-    # H2 DB
-    url: jdbc:h2:tcp://localhost/~/cpumonitor
-    driverClassName: org.h2.Driver
-    username: sa
-    password: cpumonitor
-
-    # mariaDB
-    #url: jdbc:mariadb://localhost:3306/cpu_monitor
-    #username:
-    #password:
-
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    #database-platform: org.hibernate.dialect.MariaDBDialect
-    hibernate:
-      ddl-auto: update
-
 logging:
   level:
     org.springframework: INFO

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: cpumonitor
+
+  datasource:
+    # mariaDB
+    url: jdbc:mariadb://localhost:3307/cpu_monitor?serverTimezone=UTC&characterEncoding=UTF-8
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: '0000'
+
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: create

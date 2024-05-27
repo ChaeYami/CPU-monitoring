@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: cpumonitor
+
+  datasource:
+    # H2 DB
+    url: jdbc:h2:tcp://localhost/~/cpumonitor
+    driverClassName: org.h2.Driver
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    #database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: create

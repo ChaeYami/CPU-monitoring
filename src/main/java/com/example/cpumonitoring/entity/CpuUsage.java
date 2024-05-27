@@ -18,12 +18,12 @@ public class CpuUsage {
     @Column(name = "id")
     private Long id;
 
-    private String usage;
+    private String cpuUsage;
 
     private LocalDateTime timestamp;
 
-    public CpuUsage(String usage, LocalDateTime timestamp) {
-        this.usage = usage;
+    public CpuUsage(String cpuUsage, LocalDateTime timestamp) {
+        this.cpuUsage = cpuUsage;
         this.timestamp = timestamp;
     }
 }
