@@ -10,7 +10,8 @@
 
 2. Database Configuration:
 
-    - resources 디렉토리 > 데이터베이스 설정 확인:
+    > resources 디렉토리 > 데이터베이스 설정 확인:
+      
     ``` yml
     # application-dev.yml
 
@@ -32,7 +33,7 @@
         password: ${MARIA_PASSWORD}
 
     ```
-    - 프로젝트 root 경로 > 환경 변수 파일(.env) 생성 > 데이터베이스 username과 password 추가:
+    > 프로젝트 root 경로 > 환경 변수 파일(.env) 생성 > 데이터베이스 username과 password 추가:
     ```env
     H2_USERNAME=
     H2_PASSWORD=
@@ -41,16 +42,16 @@
     ```
 
 3. Build and Run with Gradle:
-    - 개발환경 실행 
+    > 개발환경 실행 
     ```shell
     ./gradlew bootRun --args='--spring.profiles.active=dev'
     ```
-    - 운용환경 실행
+    > 운용환경 실행
     ```shell
     ./gradlew bootRun --args='--spring.profiles.active=prod'
     ```  
 
-5. Swagger Documentation:
+4. Swagger Documentation:
     ```url
     http://localhost:8080/swagger-ui/index.html
     ```
@@ -179,12 +180,17 @@
 <summary>ex) [분 단위 조회] 최근 1주보다 이전 시각을 시작 구간으로 설정할 경우</summary>
 <div markdown = '1'></div>
   
-- Query Params : **2023-05-26**T05:00:00, 2024-05-27T18:00:00  
+- Query Params :
+    - startTime : **2023-05-26**T05:00:00,
+    - endTime : 2024-05-27T18:00:00
+  
 - Request
+  
   ```url
   http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2023-05-26T05:00:00&endTime=2024-05-27T18:00:00
   ```
 - Response
+  
   ```jsonc
     {
         "cpuUsage": [
@@ -197,16 +203,6 @@
                 "id": 2,
                 "usage": "9.41%",
                 "timestamp": "2024-05-26T06:12:00"
-            },
-            {
-                "id": 3,
-                "usage": "3.31%",
-                "timestamp": "2024-05-26T06:13:00"
-            },
-            {
-                "id": 4,
-                "usage": "8.56%",
-                "timestamp": "2024-05-26T06:14:00"
             },
             // .. 생략 ..
             {
@@ -234,9 +230,13 @@
 
 #### 2. API 요청 시 잘못된 파라미터에 대한 예외
 
-- `MethodArgumentTypeMismatchException` 사용
+- 메서드별 파라미터 형식 에러(날짜, 시간) : `MethodArgumentTypeMismatchException` 사용
 
 - 컨트롤러에서 해당 에러 발생 시 'Invalid parameter' 메시지와 함께 HTTP `BAD_REQUEST` 상태코드 반환
+
+- 구간 시작 날짜(또는 시간)가 종료 날짜(또는 시간)보다 뒤인 경우
+  
+   - 커스텀 에러 : `InvalidDateTimeRangeException` 에러 처리
 
 
 ### 테스트
@@ -257,17 +257,20 @@
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
 ```
-- method : GET
-- Query Params : startTime, startTime
+- **method : GET**
+- **Query Params : startTime, startTime**
 <details>
-<summary>Example</summary>
+<summary>Example : Success</summary>
 <div markdown = '1'></div>
 
 - Request
+  
   ```url
   http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
   ```
 - Response
+
+  > Status Code : 200 OK
   ```json
      {
         "cpuUsage": [
@@ -322,23 +325,64 @@ GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00
     }
   ```
 </details>
+
+<details>
+<summary>Example : Invalid parameter</summary>
+<div markdown = '1'></div>
+
+- Request
+  
+    > startTime : 2024-05-27 -> DateTime 파라미터에 Date 넣어 요청 
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-27&endTime=2024-05-27T23:50:00
+  ```
+- Response
+
+  > Status Code : 400 Bad Request
+  ```
+  Invalid parameter: startTime
+  ```
+</details>
+
+<details>
+<summary>Example : Invalid DateTimeRange</summary>
+<div markdown = '1'></div>
+
+- Request
+  
+    > startTime : 2024-05-28T01:30:00   
+    > endTime : 2024-05-28T01:00:00   
+    > -> 시작 시간이 종료 시간보다 뒤인 경우   
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-28T01:30:00&endTime=2024-05-28T01:00:00
+  ```
+- Response
+
+  > Status Code : 400 Bad Request
+  ```
+  startDate(startTime) cannot be after endDate(endTime)
+  ```
+</details>
     
     
 ### 시 단위 조회
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
 ```
-- method : GET
-- Query Params : date
+- **method : GET**
+- **Query Params : date**
 <details>
-<summary>Example</summary>
+<summary>Example : Success</summary>
 <div markdown = '1'></div>
 
 - Request
+  
   ```url
   http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
   ```
 - Response
+
+  > Status Code : 200 OK
   ```json
     {
         "cpuUsage": {
@@ -368,22 +412,42 @@ GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
   ```
 </details>
 
+<details>
+<summary>Example : Invalid parameter</summary>
+<div markdown = '1'></div>
+
+- Request
+  
+    > date : 2024 -> Date 형식 불일치 
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024
+  ```
+- Response
+
+  > Status Code : 400 Bad Request
+  ```
+  Invalid parameter: date
+  ```
+</details>
      
 ### 일 단위 조회
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
 ```
-- method : GET
-- Query Params : startDate, endDate
+- **method : GET**
+- **Query Params : startDate, endDate**
 <details>
-<summary>Example</summary>
+<summary>Example : Success</summary>
 <div markdown = '1'></div>
 
 - Request
+  
   ```url
   http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
   ```
 - Response
+
+  > Status Code : 200 OK
   ```json
     {
         "cpuUsage": {
@@ -401,5 +465,43 @@ GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=202
         "startDate": "2024-05-26",
         "endDate": "2024-05-27"
     }
+  ```
+</details>
+
+<details>
+<summary>Example : Invalid parameter</summary>
+<div markdown = '1'></div>
+
+- Request
+  
+    > startDate : 2022 -> Date 형식 불일치 
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2022&endDate=2024-05-27
+  ```
+- Response
+
+  > Status Code : 400 Bad Request
+  ```
+  Invalid parameter: startDate
+  ```
+</details>
+
+<details>
+<summary>Example : Invalid DateTimeRange</summary>
+<div markdown = '1'></div>
+
+- Request
+  
+    > startDate : 2024-05-28   
+    > endDate : 2024-05-27   
+    > -> 시작 날짜가 종료 날짜보다 뒤인 경우   
+  ```url
+  http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-28&endDate=2024-05-27
+  ```
+- Response
+
+  > Status Code : 400 Bad Request
+  ```
+  startDate(startTime) cannot be after endDate(endTime)
   ```
 </details>
