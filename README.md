@@ -235,23 +235,30 @@
 
 ### 예외처리 
 #### 1. 데이터 수집 시 예외처리
-- CPU 사용률을 수집하고 저장하는 메서드(`collectCpuUsage`, `saveCpuUsage`) 실행 시 에러가 발생하면 커스텀 예외를 던지도록 설정
+
+- 커스텀 에러 : `CpuUsageCollectionException` 에러
+
+    - CPU 사용률을 수집하고 저장하는 메서드(`collectCpuUsage`, `saveCpuUsage`) 실행 시 에러가 발생하면 커스텀 예외를 던지도록 설정
   
-- 해당 커스텀 예외에서 메시지에 에러 내용 반환
+    - 메시지에 에러 내용 반환
   
-- `ExceptionHandler`에서 커스텀 예외 발생 시 에러 로그로 에러 메시지를 남기도록 설정
+    - `ExceptionHandler`에서 커스텀 예외 발생 시 에러 로그로 메시지를 남기도록 설정 + INTERNAL_SERVER_ERROR 반환
 
 - 기타 예외 상황에도 `ExceptionHandler` 적용
 
 #### 2. API 요청 시 잘못된 파라미터에 대한 예외
 
-- 메서드별 파라미터 형식 에러(날짜, 시간) : `MethodArgumentTypeMismatchException` 사용
+- 메서드별 파라미터 형식 에러(날짜, 시각) : `MethodArgumentTypeMismatchException` 사용
 
 - 컨트롤러에서 해당 에러 발생 시 'Invalid parameter' 메시지와 함께 HTTP `BAD_REQUEST` 상태코드 반환
 
-- 구간 시작 날짜(또는 시간)가 종료 날짜(또는 시간)보다 뒤인 경우
-  
-   - 커스텀 에러 : `InvalidDateTimeRangeException` 에러 처리
+- 커스텀 에러 : `InvalidDateTimeRangeException` 에러
+
+    - `ExceptionHandler`에서 BAD_REQUEST를 반환하도록 설정 
+
+    - 구간 시작 날짜(또는 시각)가 종료 날짜(또는 시각)보다 뒤인 경우
+ 
+    - 구간 종료 날짜(또는 시각)가 현재 날짜(또는 시각)보다 뒤인 경우 
 
 
 ### 테스트
@@ -363,21 +370,40 @@ GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00
     <details>
     <summary>Example : Invalid DateTimeRange</summary>
     <div markdown = '1'></div>
-    
-    - Request
+
+    - 시작 시간이 종료 시간보다 뒤인 경우
       
-        > startTime : 2024-05-28T01:30:00   
-        > endTime : 2024-05-28T01:00:00   
-        > -> 시작 시간이 종료 시간보다 뒤인 경우   
-      ```url
-      http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-28T01:30:00&endTime=2024-05-28T01:00:00
-      ```
-    - Response
-    
-      > Status Code : 400 Bad Request
-      ```
-      startDate(startTime) cannot be after endDate(endTime)
-      ```
+        - Request
+          
+            > startTime : 2024-05-28T01:30:00   
+            > endTime : 2024-05-28T01:00:00
+            
+          ```url
+          http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-28T01:30:00&endTime=2024-05-28T01:00:00
+          ```
+        - Response
+        
+          > Status Code : 400 Bad Request
+          ```
+          startDate(startTime) cannot be after endDate(endTime)
+          ```
+
+    - 종료 시간이 현재보다 뒤인 경우
+      
+        - Request
+          
+            > startTime : 2024-05-28T03:00:00   
+            > endTime : 2024-05-28T05:33:00
+            
+          ```url
+          http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-28T03:00:00&endTime=2024-05-28T05:33:00
+          ```
+        - Response
+        
+          > Status Code : 400 Bad Request
+          ```
+          endTime after current time cannot be specified.
+          ```
     </details>
     
     
@@ -446,7 +472,25 @@ GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
       Invalid parameter: date
       ```
     </details>
-     
+
+    <details>
+    <summary>Example : Invalid DateTimeRange</summary>
+    <div markdown = '1'></div>
+
+
+    - Request
+      
+        > date : 2024-08-28 -> 날짜가 오늘보다 뒤인 경우   
+      ```url
+      http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-08-28
+      ```
+    - Response
+    
+      > Status Code : 400 Bad Request
+      ```
+      date after today cannot be specified.
+      ```
+    </details>
 ### 일 단위 조회
 ```url
 GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
@@ -507,19 +551,36 @@ GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=202
     <details>
     <summary>Example : Invalid DateTimeRange</summary>
     <div markdown = '1'></div>
-    
-    - Request
-      
-        > startDate : 2024-05-28   
-        > endDate : 2024-05-27   
-        > -> 시작 날짜가 종료 날짜보다 뒤인 경우   
-      ```url
-      http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-28&endDate=2024-05-27
-      ```
-    - Response
-    
-      > Status Code : 400 Bad Request
-      ```
-      startDate(startTime) cannot be after endDate(endTime)
-      ```
+
+    - 시작 날짜가 종료 날짜보다 뒤인 경우
+          
+        - Request
+          
+            > startDate : 2024-05-28   
+            > endDate : 2024-05-27   
+          ```url
+          http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-28&endDate=2024-05-27
+          ```
+        - Response
+        
+          > Status Code : 400 Bad Request
+          ```
+          startDate(startTime) cannot be after endDate(endTime)
+          ```
+
+    - 종료 날짜가 오늘보다 뒤인 경우
+          
+        - Request
+          
+          > startDate : 2020-05-27   
+          > endDate : 2024-05-29   
+          ```url
+          http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2020-05-27&endDate=2024-05-29
+          ```
+        - Response
+        
+          > Status Code : 400 Bad Request
+          ```
+          endDate after today cannot be specified.
+          ```
     </details>
