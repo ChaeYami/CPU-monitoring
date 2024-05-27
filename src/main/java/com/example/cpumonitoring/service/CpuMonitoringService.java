@@ -18,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 @Slf4j
 @Service
@@ -66,6 +67,7 @@ public class CpuMonitoringService {
                                 .withMinute(0)
                                 .withSecond(0)
                                 .withNano(0),
+                        TreeMap::new, // 시간 오름차순 정렬
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 this::calculateUsageStats
@@ -96,6 +98,7 @@ public class CpuMonitoringService {
         Map<LocalDate, CpuUsageStats> returnCpuUsages = cpuUsages.stream()
                 .collect(Collectors.groupingBy(
                         usage -> usage.getTimestamp().toLocalDate(),
+                        TreeMap::new, // 날짜 정렬
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 this::calculateUsageStats

@@ -59,9 +59,9 @@ class CpuMonitoringControllerTest {
         // 시 단위 조회 데이터 설정
         LocalDate date = LocalDate.now();
         List<CpuUsageStats> cpuUsageStatsList = new ArrayList<>();
-        cpuUsageStatsList.add(new CpuUsageStats(20.0, 20.0, 20.0)); // 00:00부터 00:59까지 사용량
-        cpuUsageStatsList.add(new CpuUsageStats(30.0, 30.0, 30.0)); // 01:00부터 01:59까지 사용량
-        cpuUsageStatsList.add(new CpuUsageStats(40.0, 40.0, 40.0)); // 02:00부터 02:59까지 사용량
+        cpuUsageStatsList.add(new CpuUsageStats(10.0, 20.0, 15.0)); // 00:00부터 00:59까지 사용량
+        cpuUsageStatsList.add(new CpuUsageStats(10.0, 30.0, 20.0)); // 01:00부터 01:59까지 사용량
+        cpuUsageStatsList.add(new CpuUsageStats(10.0, 40.0, 25.0)); // 02:00부터 02:59까지 사용량
 
         Map<LocalDateTime, CpuUsageStats> cpuUsagesByHour = new LinkedHashMap<>();
         LocalDateTime currentHour = date.atStartOfDay();
@@ -114,17 +114,17 @@ class CpuMonitoringControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.cpuUsage", hasKey("2024-05-27T00:00")))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].minUsage").value(20.0))
+                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].minUsage").value(10.0))
                 .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].maxUsage").value(20.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].averageUsage").value(20.0))
+                .andExpect(jsonPath("$.cpuUsage['2024-05-27T00:00'].averageUsage").value(15.0))
                 .andExpect(jsonPath("$.cpuUsage", hasKey("2024-05-27T01:00")))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].minUsage").value(30.0))
+                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].minUsage").value(10.0))
                 .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].maxUsage").value(30.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].averageUsage").value(30.0))
+                .andExpect(jsonPath("$.cpuUsage['2024-05-27T01:00'].averageUsage").value(20.0))
                 .andExpect(jsonPath("$.cpuUsage", hasKey("2024-05-27T02:00")))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].minUsage").value(40.0))
+                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].minUsage").value(10.0))
                 .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].maxUsage").value(40.0))
-                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].averageUsage").value(40.0));
+                .andExpect(jsonPath("$.cpuUsage['2024-05-27T02:00'].averageUsage").value(25.0));
     }
 
 
