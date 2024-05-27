@@ -47,7 +47,7 @@ class CpuMonitoringServiceTest {
         when(cpuUsageRepository.findByTimestampBetween(startTime, endTime)).thenReturn(fakeData);
 
         // When
-        List<CpuUsage> result = cpuMonitoringService.getCpuUsageByMinute(startTime, endTime);
+        List<CpuUsage> result = cpuMonitoringService.getCpuUsageByMinute(startTime, endTime).getCpuUsage();
 
         // Then
         assertEquals(3, result.size());
@@ -66,7 +66,7 @@ class CpuMonitoringServiceTest {
         when(cpuUsageRepository.findByTimestampBetween(any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(fakeData);
 
         // When
-        Map<Integer, CpuUsageStats> result = cpuMonitoringService.getCpuUsageStatsByHour(date);
+        Map<LocalDateTime, CpuUsageStats> result = cpuMonitoringService.getCpuUsageStatsByHour(date).getCpuUsage();
 
         // Then
         assertEquals(3, result.size());
@@ -86,7 +86,7 @@ class CpuMonitoringServiceTest {
         when(cpuUsageRepository.findByTimestampBetween(any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(fakeData);
 
         // When
-        Map<LocalDate, CpuUsageStats> result = cpuMonitoringService.getCpuUsageStatsByDay(startDate, endDate);
+        Map<LocalDate, CpuUsageStats> result = cpuMonitoringService.getCpuUsageStatsByDay(startDate, endDate).getCpuUsage();
 
         // Then
         assertEquals(1, result.size());
