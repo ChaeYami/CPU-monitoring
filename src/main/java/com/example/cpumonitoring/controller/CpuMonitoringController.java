@@ -1,5 +1,6 @@
 package com.example.cpumonitoring.controller;
 
+import com.example.cpumonitoring.controller.docs.CpuMonitoringControllerDocs;
 import com.example.cpumonitoring.model.CpuUsageDateResponse;
 import com.example.cpumonitoring.model.CpuUsageMinuteResponse;
 import com.example.cpumonitoring.model.CpuUsageHourResponse;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cpumonitoring")
-public class CpuMonitoringController {
+public class CpuMonitoringController implements CpuMonitoringControllerDocs {
 
     private final CpuMonitoringService cpuMonitoringService;
 
