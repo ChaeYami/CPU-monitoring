@@ -108,21 +108,27 @@ public interface CpuMonitoringControllerDocs {
                     @Content(mediaType = "application/json", examples = {
                             @ExampleObject(
                                     name = "잘못된 파라미터",
-                                    value = "{\"message\": \"Invalid parameter: date\", \"date\": \"2024\"}"
+                                    value = "{\"message\": \"Invalid parameter: startDate\", \"startDate\": \"2024\"}"
                             ),
                             @ExampleObject(
-                                    name = "날짜가 오늘보다 뒤인 경우",
-                                    value = "{\"message\": \"date after today cannot be specified.\", \"date \": \"2024-08-28\"}"
+                                    name = "종료 날짜가 오늘보다 뒤인 경우",
+                                    value = "{\"message\": \"date after today cannot be specified.\", \"startDate\": \"2024-05-27\", \"endDate\": \" 2024-07-29\"}"
+                            ),
+                            @ExampleObject(
+                                    name = "시작 날짜가 종료 날짜보다 뒤인 경우",
+                                    value = "{\"message\": \"startDate(startTime) cannot be after endDate(endDate)\", \"startDate\": \"2024-05-28\", \"endDate\": \"2024-05-27\"}"
                             ),
                     }),
             })
     })
     @Parameters({
-            @Parameter(name = "date", description = "날짜", example = "2024-05-20")
+            @Parameter(name = "startDate", description = "구간 시작 날짜", example = "2024-05-27"),
+            @Parameter(name = "endDate", description = "End date of the range", example = "2024-05-27")
     })
     @GetMapping("/hour")
     ResponseEntity<CpuUsageHourResponse> getCpuUsageStatsByHour(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate);
 
     @Operation(summary = "Get CPU Usage by Day", description = "지정한 구간의 일 단위 CPU 사용률 최소/최대/평균 조회")
     @ApiResponses(value = {
