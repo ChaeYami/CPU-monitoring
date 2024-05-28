@@ -24,7 +24,27 @@ public interface CpuMonitoringControllerDocs {
 
     @Operation(summary = "Get CPU Usage by Minute", description = "지정한 시간 구간의 분 단위 CPU 사용률 조회")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "success", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "success", content = {
+                    @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(
+                                    value = "{" +
+                                            "\"cpuUsage\": [" +
+                                            "{\"id\": 1, \"usage\": \"4.67%\", \"timestamp\": \"2024-05-26T06:11:16\"}," +
+                                            "{\"id\": 2, \"usage\": \"9.41%\", \"timestamp\": \"2024-05-26T06:12:00\"}," +
+                                            "{\"id\": 3, \"usage\": \"3.31%\", \"timestamp\": \"2024-05-26T06:13:00\"}," +
+                                            "{\"id\": 4, \"usage\": \"8.56%\", \"timestamp\": \"2024-05-26T06:14:00\"}," +
+                                            "{\"id\": 5, \"usage\": \"8.58%\", \"timestamp\": \"2024-05-26T06:15:00\"}," +
+                                            "{\"id\": 6, \"usage\": \"5.78%\", \"timestamp\": \"2024-05-26T06:19:25\"}," +
+                                            "{\"id\": 7, \"usage\": \"21.40%\", \"timestamp\": \"2024-05-26T06:20:00\"}," +
+                                            "{\"id\": 8, \"usage\": \"14.03%\", \"timestamp\": \"2024-05-26T06:21:00\"}," +
+                                            "{\"id\": 9, \"usage\": \"9.83%\", \"timestamp\": \"2024-05-26T06:22:00\"}" +
+                                            "]," +
+                                            "\"startTime\": \"2024-05-26T05:00:00\"," +
+                                            "\"endTime\": \"2024-05-27T18:00:00\"" +
+                                            "}"
+                            )
+                    })
+            }),
             @ApiResponse(responseCode = "400", description = "실패 : 400 Bad Request", content = {
                     @Content(mediaType = "application/json", examples = {
                             @ExampleObject(
@@ -37,7 +57,7 @@ public interface CpuMonitoringControllerDocs {
                             ),
                             @ExampleObject(
                                     name = "종료 시간이 현재보다 뒤인 경우",
-                                    value = "{\"message\": \"endTime after current time cannot be specified.\n\", \"startTime\": \"2024-05-28T01:30:00\", \"endTime\": \"2024-07-28T01:00:00\"}"
+                                    value = "{\"message\": \"endTime after current time cannot be specified.\", \"startTime\": \"2024-05-28T01:30:00\", \"endTime\": \"2024-07-28T01:00:00\"}"
                             )
                     }),
             })
@@ -53,7 +73,37 @@ public interface CpuMonitoringControllerDocs {
 
     @Operation(summary = "Get CPU Usage by Hour", description = "특정 날짜의 시 단위 CPU 사용률 최소/최대/평균 조회")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "success", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "success", content = {
+                    @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(
+                                    value = "{" +
+                                            "\"cpuUsage\": {" +
+                                            "\"2024-05-27T02:00\": {" +
+                                            "\"minUsage\": 4.02," +
+                                            "\"maxUsage\": 4.02," +
+                                            "\"averageUsage\": 4.02" +
+                                            "}," +
+                                            "\"2024-05-27T03:00\": {" +
+                                            "\"minUsage\": 4.13," +
+                                            "\"maxUsage\": 14.35," +
+                                            "\"averageUsage\": 8.06" +
+                                            "}," +
+                                            "\"2024-05-27T04:00\": {" +
+                                            "\"minUsage\": 5.06," +
+                                            "\"maxUsage\": 77.34," +
+                                            "\"averageUsage\": 24.95" +
+                                            "}," +
+                                            "\"2024-05-27T05:00\": {" +
+                                            "\"minUsage\": 5.7," +
+                                            "\"maxUsage\": 28.67," +
+                                            "\"averageUsage\": 17.19" +
+                                            "}" +
+                                            "}," +
+                                            "\"date\": \"2024-05-27\"" +
+                                            "}"
+                            )
+                    })
+            }),
             @ApiResponse(responseCode = "400", description = "실패 : 400 Bad Request", content = {
                     @Content(mediaType = "application/json", examples = {
                             @ExampleObject(
@@ -76,7 +126,28 @@ public interface CpuMonitoringControllerDocs {
 
     @Operation(summary = "Get CPU Usage by Day", description = "지정한 구간의 일 단위 CPU 사용률 최소/최대/평균 조회")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "success", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "success", content = {
+                    @Content(mediaType = "application/json",examples = {
+                            @ExampleObject(
+                                    value = "{" +
+                                            "\"cpuUsage\": {" +
+                                            "\"2024-05-26\": {" +
+                                            "\"minUsage\": 2.99," +
+                                            "\"maxUsage\": 27.69," +
+                                            "\"averageUsage\": 9.35" +
+                                            "}," +
+                                            "\"2024-05-27\": {" +
+                                            "\"minUsage\": 4.02," +
+                                            "\"maxUsage\": 77.34," +
+                                            "\"averageUsage\": 14.92" +
+                                            "}" +
+                                            "}," +
+                                            "\"startDate\": \"2024-05-26\"," +
+                                            "\"endDate\": \"2024-05-27\"" +
+                                            "}"
+                            )
+                    })
+            }),
             @ApiResponse(responseCode = "400", description = "실패 : 400 Bad Request", content = {
                     @Content(mediaType = "application/json", examples = {
                             @ExampleObject(
@@ -89,7 +160,7 @@ public interface CpuMonitoringControllerDocs {
                             ),
                             @ExampleObject(
                                     name = "종료 날짜가 오늘보다 뒤인 경우",
-                                    value = "{\"message\": \"endDate after today cannot be specified.\n\", \"startDate\": \"2020-05-27\", \"endDate\": \" 2024-07-29\"}"
+                                    value = "{\"message\": \"endDate after today cannot be specified.\", \"startDate\": \"2020-05-27\", \"endDate\": \" 2024-07-29\"}"
                             )
                     }),
             })
