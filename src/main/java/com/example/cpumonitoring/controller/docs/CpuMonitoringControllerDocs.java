@@ -25,9 +25,22 @@ public interface CpuMonitoringControllerDocs {
     @Operation(summary = "Get CPU Usage by Minute", description = "지정한 시간 구간의 분 단위 CPU 사용률 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "success", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "실패 : 잘못된 파라미터", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Invalid parameter: startTime\"}"))),
-            @ApiResponse(responseCode = "400", description = "실패 : 시작 시간이 종료 시간보다 뒤인 겨우", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"startDate(startTime) cannot be after endDate(endTime)\"}"))),
-            @ApiResponse(responseCode = "400", description = "실패 : 종료 시간이 현재보다 뒤인 경우", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"endTime after current time cannot be specified.\"}")))
+            @ApiResponse(responseCode = "400", description = "실패 : 400 Bad Request", content = {
+                    @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(
+                                    name = "잘못된 파라미터",
+                                    value = "{\"message\": \"Invalid parameter: startTime\", \"startTime\": \"2024-05-27\", \"endTime\": \"2023-12-31T23:59:59\"}"
+                            ),
+                            @ExampleObject(
+                                    name = "시작 시간이 종료 시간보다 뒤인 경우",
+                                    value = "{\"message\": \"startDate(startTime) cannot be after endDate(endTime)\", \"startTime\": \"2024-05-28T01:30:00\", \"endTime\": \"2024-05-28T01:00:00\"}"
+                            ),
+                            @ExampleObject(
+                                    name = "종료 시간이 현재보다 뒤인 경우",
+                                    value = "{\"message\": \"endTime after current time cannot be specified.\n\", \"startTime\": \"2024-05-28T01:30:00\", \"endTime\": \"2024-07-28T01:00:00\"}"
+                            )
+                    }),
+            })
     })
     @Parameters({
             @Parameter(name = "startTime", description = "구간 시작 시각", example = "2024-05-20T00:00:00"),
@@ -41,8 +54,18 @@ public interface CpuMonitoringControllerDocs {
     @Operation(summary = "Get CPU Usage by Hour", description = "특정 날짜의 시 단위 CPU 사용률 최소/최대/평균 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "success", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "실패 : 잘못된 파라미터", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Invalid parameter: date\"}"))),
-            @ApiResponse(responseCode = "400", description = "실패 : 날짜가 오늘보다 뒤인 경우", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"date after today cannot be specified.\"}")))
+            @ApiResponse(responseCode = "400", description = "실패 : 400 Bad Request", content = {
+                    @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(
+                                    name = "잘못된 파라미터",
+                                    value = "{\"message\": \"Invalid parameter: date\", \"date\": \"2024\"}"
+                            ),
+                            @ExampleObject(
+                                    name = "날짜가 오늘보다 뒤인 경우",
+                                    value = "{\"message\": \"date after today cannot be specified.\", \"date \": \"2024-08-28\"}"
+                            ),
+                    }),
+            })
     })
     @Parameters({
             @Parameter(name = "date", description = "날짜", example = "2024-05-20")
@@ -54,9 +77,22 @@ public interface CpuMonitoringControllerDocs {
     @Operation(summary = "Get CPU Usage by Day", description = "지정한 구간의 일 단위 CPU 사용률 최소/최대/평균 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "success", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "실패 : 잘못된 파라미터", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Invalid parameter: startDate\"}"))),
-            @ApiResponse(responseCode = "400", description = "실패 : 시작 날짜가 종료 날짜보다 뒤인 경우", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"startDate(startTime) cannot be after endDate(endTime)\"}"))),
-            @ApiResponse(responseCode = "400", description = "실패 : 종료 날짜가 오늘보다 뒤인 경우", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"endDate after today cannot be specified.\"}")))
+            @ApiResponse(responseCode = "400", description = "실패 : 400 Bad Request", content = {
+                    @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(
+                                    name = "잘못된 파라미터",
+                                    value = "{\"message\": \"Invalid parameter: startDate\", \"startDate \": \"2022\", \"endDate\": \"2023-12-31\"}"
+                            ),
+                            @ExampleObject(
+                                    name = "시작 날짜가 종료 날짜보다 뒤인 경우",
+                                    value = "{\"message\": \"startDate(startTime) cannot be after endDate(endDate)\", \"startDate\": \"2024-05-28\", \"endDate\": \"2024-05-27\"}"
+                            ),
+                            @ExampleObject(
+                                    name = "종료 날짜가 오늘보다 뒤인 경우",
+                                    value = "{\"message\": \"endDate after today cannot be specified.\n\", \"startDate\": \"2020-05-27\", \"endDate\": \" 2024-07-29\"}"
+                            )
+                    }),
+            })
     })
     @Parameters({
             @Parameter(name = "startDate", description = "구간 시작 날짜", example = "2024-05-20"),
