@@ -70,11 +70,11 @@ class CpuMonitoringControllerTest {
             cpuUsagesByHour.put(currentHour, stats);
             currentHour = currentHour.plusHours(1);
         }
-      Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any()))
-                .thenReturn(new CpuUsageHourResponse(cpuUsagesByHour, date));
+      Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any(),any()))
+                .thenReturn(new CpuUsageHourResponse(cpuUsagesByHour, date, date));
 
-        Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any()))
-                .thenReturn(new CpuUsageHourResponse(cpuUsagesByHour, date));
+        Mockito.when(cpuMonitoringService.getCpuUsageStatsByHour(any(),any()))
+                .thenReturn(new CpuUsageHourResponse(cpuUsagesByHour, date, date));
 
 
         // 일 단위 조회 데이터 설정
@@ -110,7 +110,8 @@ class CpuMonitoringControllerTest {
     void testGetCpuUsageStatsByHour() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/cpumonitoring/hour")
-                        .param("date", date.toString())
+                        .param("startDate", date.toString())
+                        .param("endDate", date.toString())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.cpuUsage", hasKey(date.toString() + "T00:00")))

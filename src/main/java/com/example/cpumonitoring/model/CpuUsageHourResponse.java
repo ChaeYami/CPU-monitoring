@@ -15,6 +15,7 @@ import java.util.Map;
 @Getter
 public class CpuUsageHourResponse {
     private Map<LocalDateTime, CpuUsageStats> cpuUsage;
-    private LocalDate date;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 }

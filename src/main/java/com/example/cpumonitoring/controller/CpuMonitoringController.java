@@ -43,8 +43,9 @@ public class CpuMonitoringController {
      */
     @GetMapping("/hour")
     public ResponseEntity<CpuUsageHourResponse> getCpuUsageStatsByHour(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        CpuUsageHourResponse cpuUsageStatsByHour = cpuMonitoringService.getCpuUsageStatsByHour(date);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        CpuUsageHourResponse cpuUsageStatsByHour = cpuMonitoringService.getCpuUsageStatsByHour(startDate, endDate);
         return ResponseEntity.ok(cpuUsageStatsByHour);
     }
 

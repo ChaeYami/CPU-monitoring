@@ -61,16 +61,13 @@ public class CpuMonitoringService {
      * @param date 조회할 날짜
      * @return 사용률 List
      */
-    public CpuUsageHourResponse getCpuUsageStatsByHour(LocalDate date) {
-        LocalDate adjustedDate = adjustDate(date, 3, ChronoUnit.MONTHS);
+    public CpuUsageHourResponse getCpuUsageStatsByHour(LocalDate startDate , LocalDate endDate) {
+        LocalDate adjustedStartDate = adjustDate(startDate, 3, ChronoUnit.MONTHS);
 
-        // 날짜가 오늘보다 뒤인 경우
-        if (date.isAfter(LocalDate.now())) {
-            throw new InvalidDateTimeRangeException("date after today cannot be specified.");
-        }
+        validateDateRange(startDate, endDate);
 
-        LocalDateTime startOfDay = adjustedDate.atStartOfDay();
-        LocalDateTime endOfDay = adjustedDate.atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = adjustedStartDate.atStartOfDay();
+        LocalDateTime endOfDay = endDate.atTime(LocalTime.MAX);
 
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(startOfDay, endOfDay);
 
@@ -86,7 +83,7 @@ public class CpuMonitoringService {
                                 this::calculateUsageStats
                         )
                 ));
-        return new CpuUsageHourResponse(returnCpuUsages, adjustedDate);
+        return new CpuUsageHourResponse(returnCpuUsages, adjustedStartDate,endDate);
     }
 
     /**
@@ -96,14 +93,7 @@ public class CpuMonitoringService {
      * @return 사용률 List
      */
     public CpuUsageDateResponse getCpuUsageStatsByDay(LocalDate startDate, LocalDate endDate) {
-        // 시작 날짜가 종료 날짜보다 뒤인 경우
-        if (startDate.isAfter(endDate)) {
-            throw new InvalidDateTimeRangeException();
-        }
-        // 종료 날짜가 오늘보다 뒤인 경우
-        if (endDate.isAfter(LocalDate.now())) {
-            throw new InvalidDateTimeRangeException("endDate after today cannot be specified.");
-        }
+        validateDateRange(startDate, endDate);
         LocalDate adjustedStartDate = adjustDate(startDate, 1, ChronoUnit.YEARS);
 
         List<CpuUsage> cpuUsages = cpuUsageRepository.findByTimestampBetween(
@@ -122,6 +112,17 @@ public class CpuMonitoringService {
                 ));
 
         return new CpuUsageDateResponse(returnCpuUsages, adjustedStartDate, endDate);
+    }
+
+    private static void validateDateRange(LocalDate startDate, LocalDate endDate) {
+        // 시작 날짜가 종료 날짜보다 뒤인 경우
+        if (startDate.isAfter(endDate)) {
+            throw new InvalidDateTimeRangeException();
+        }
+        // 종료 날짜가 오늘보다 뒤인 경우
+        if (endDate.isAfter(LocalDate.now())) {
+            throw new InvalidDateTimeRangeException("endDate after today cannot be specified.");
+        }
     }
 
     // 제공기한 초과시 자동 조절하는 메서드

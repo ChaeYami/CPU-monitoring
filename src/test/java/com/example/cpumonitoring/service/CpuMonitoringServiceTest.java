@@ -66,7 +66,7 @@ class CpuMonitoringServiceTest {
         when(cpuUsageRepository.findByTimestampBetween(any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(fakeData);
 
         // When
-        Map<LocalDateTime, CpuUsageStats> result = cpuMonitoringService.getCpuUsageStatsByHour(date).getCpuUsage();
+        Map<LocalDateTime, CpuUsageStats> result = cpuMonitoringService.getCpuUsageStatsByHour(date, date).getCpuUsage();
 
         // Then
         assertEquals(3, result.size());
