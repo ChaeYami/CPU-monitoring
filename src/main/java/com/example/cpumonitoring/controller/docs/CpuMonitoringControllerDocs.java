@@ -63,8 +63,8 @@ public interface CpuMonitoringControllerDocs {
             })
     })
     @Parameters({
-            @Parameter(name = "startTime", description = "구간 시작 시각", example = "2024-05-20T00:00:00"),
-            @Parameter(name = "endTime", description = "구간 종료 시각", example = "2024-05-20T00:10:00")
+            @Parameter(name = "startTime", description = "Start datetime of the range", example = "2024-05-20T00:00:00"),
+            @Parameter(name = "endTime", description = "End datetime of the range", example = "2024-05-20T00:10:00")
     })
     @GetMapping("/minute")
     ResponseEntity<CpuUsageMinuteResponse> getCpuUsageByMinute(
@@ -122,7 +122,7 @@ public interface CpuMonitoringControllerDocs {
             })
     })
     @Parameters({
-            @Parameter(name = "startDate", description = "구간 시작 날짜", example = "2024-05-27"),
+            @Parameter(name = "startDate", description = "Start date of the range", example = "2024-05-27"),
             @Parameter(name = "endDate", description = "End date of the range", example = "2024-05-27")
     })
     @GetMapping("/hour")
@@ -172,7 +172,7 @@ public interface CpuMonitoringControllerDocs {
             })
     })
     @Parameters({
-            @Parameter(name = "startDate", description = "구간 시작 날짜", example = "2024-05-20"),
+            @Parameter(name = "startDate", description = "Start date of the range", example = "2024-05-20"),
             @Parameter(name = "endDate", description = "End date of the range", example = "2024-05-21")
     })
     @GetMapping("/day")
