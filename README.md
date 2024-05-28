@@ -277,10 +277,13 @@
 ### 분 단위 조회
 
 ```url
-GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00&endTime=2024-05-26T07:11:00
+GET http://127.0.0.1:8080/api/cpumonitoring/minute
 ```
 - **method : GET**
-- **Query Params : startTime, startTime**
+- **Query Params : startTime, endTime**
+    ```url
+    startTime=yyyy-mm-ddThh:mm:ss&endTime=yyyy-mm-ddThh:mm:ss
+    ```
   
     <details>
     <summary>Example : Success</summary>
@@ -409,10 +412,13 @@ GET http://127.0.0.1:8080/api/cpumonitoring/minute?startTime=2024-05-26T06:11:00
     
 ### 시 단위 조회
 ```url
-GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
+GET http://127.0.0.1:8080/api/cpumonitoring/hour
 ```
 - **method : GET**
 - **Query Params : date**
+    ```url
+    date=yyyy-mm-dd
+    ```
   
     <details>
     <summary>Example : Success</summary>
@@ -493,10 +499,13 @@ GET http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
     </details>
 ### 일 단위 조회
 ```url
-GET http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2024-05-26&endDate=2024-05-27
+GET http://127.0.0.1:8080/api/cpumonitoring/day
 ```
 - **method : GET**
 - **Query Params : startDate, endDate**
+    ```url
+    startDate=yyyy-mm-dd&endDate=yyyy-mm-dd
+    ```
   
     <details>
     <summary>Example : Success</summary>
