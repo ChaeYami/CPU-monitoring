@@ -415,87 +415,104 @@ GET http://127.0.0.1:8080/api/cpumonitoring/minute
 GET http://127.0.0.1:8080/api/cpumonitoring/hour
 ```
 - **method : GET**
-- **Query Params : date**
-    ```url
-    date=yyyy-mm-dd
-    ```
+  - **Query Params : startDate, endDate**
+      ```url
+      startDate=yyyy-mm-dd&endDate=yyyy-mm-dd
+      ```
   
-    <details>
-    <summary>Example : Success</summary>
-    <div markdown = '1'></div>
+      <details>
+      <summary>Example : Success</summary>
+      <div markdown = '1'></div>
     
-    - Request
+      - Request
       
-      ```url
-      http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-05-26
-      ```
-    - Response
+        ```url
+        http://127.0.0.1:8080/api/cpumonitoring/hour?startDate=2024-05-27&endDate=2024-05-27
+        ```
+      - Response
     
-      > Status Code : 200 OK
-      ```json
-        {
-            "cpuUsage": {
-                "2024-05-27T02:00": {
-                    "minUsage": 4.02,
-                    "maxUsage": 4.02,
-                    "averageUsage": 4.02
-                },
-                "2024-05-27T03:00": {
-                    "minUsage": 4.13,
-                    "maxUsage": 14.35,
-                    "averageUsage": 8.06
-                },
-                "2024-05-27T04:00": {
-                    "minUsage": 5.06,
-                    "maxUsage": 77.34,
-                    "averageUsage": 24.95
-                },
-                "2024-05-27T05:00": {
-                    "minUsage": 5.7,
-                    "maxUsage": 28.67,
-                    "averageUsage": 17.19
-                },
-            },
-            "date": "2024-05-27"
-        }
-      ```
-    </details>
+      >   Status Code : 200 OK
+        ```json
+          {
+              "cpuUsage": {
+                  "2024-05-27T02:00": {
+                      "minUsage": 4.02,
+                      "maxUsage": 4.02,
+                      "averageUsage": 4.02
+                  },
+                  "2024-05-27T03:00": {
+                      "minUsage": 4.13,
+                      "maxUsage": 14.35,
+                      "averageUsage": 8.06
+                  },
+                  "2024-05-27T04:00": {
+                      "minUsage": 5.06,
+                      "maxUsage": 77.34,
+                      "averageUsage": 24.95
+                  },
+                  "2024-05-27T05:00": {
+                      "minUsage": 5.7,
+                      "maxUsage": 28.67,
+                      "averageUsage": 17.19
+                  },
+              },
+              "date": "2024-05-27"
+          }
+        ```
+      </details>
     
-    <details>
-    <summary>Example : Invalid parameter</summary>
-    <div markdown = '1'></div>
+      <details>
+      <summary>Example : Invalid parameter</summary>
+      <div markdown = '1'></div>
     
-    - Request
+      - Request
       
-        > date : 2024 -> Date 형식 불일치 
-      ```url
-      http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024
-      ```
-    - Response
+        >   startDate : 2024 -> Date 형식 불일치 
+        ```url
+        http://127.0.0.1:8080/api/cpumonitoring/hour?startDate=2024&endDate=2024-05-27
+        ```
+      - Response
     
-      > Status Code : 400 Bad Request
-      ```
-      Invalid parameter: date
-      ```
-    </details>
+      >   Status Code : 400 Bad Request
+        ```
+        Invalid parameter: startDate
+        ```
+      </details>
 
-    <details>
-    <summary>Example : Invalid DateTimeRange</summary>
-    <div markdown = '1'></div>
+      <details>
+      <summary>Example : Invalid DateTimeRange</summary>
+      <div markdown = '1'></div>
+    
+    - 종료 날짜가 오늘보다 뒤인 경우
 
-
-    - Request
+        - Request
       
-        > date : 2024-08-28 -> 날짜가 오늘보다 뒤인 경우   
-      ```url
-      http://127.0.0.1:8080/api/cpumonitoring/hour?date=2024-08-28
-      ```
-    - Response
+        >   endDate : 2024-05-29
+        ```url
+        http://127.0.0.1:8080/api/cpumonitoring/day?startDate=2020-05-27&endDate=2024-05-29
+        ```
+      - Response
     
-      > Status Code : 400 Bad Request
-      ```
-      date after today cannot be specified.
-      ```
+      >   Status Code : 400 Bad Request
+        ```
+        date after today cannot be specified.
+        ```
+
+    - 시작 날짜가 종료 날짜보다 뒤인 경우
+
+      - Request
+
+          > startDate : 2024-04-28   
+          > endDate : 2024-03-28
+        ```url
+        http://127.0.0.1:8080/api/cpumonitoring/hour?startDate=2024-04-28&endDate=2024-03-28
+        ```
+      - Response
+
+          > Status Code : 400 Bad Request
+        ```
+        startDate(startTime) cannot be after endDate(endTime)
+        ```
     </details>
 ### 일 단위 조회
 ```url
